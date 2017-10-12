@@ -249,11 +249,11 @@ class Reporte(object):
     def toCsv(self):
         if Reporte.outputfile != "":
             newRow = "%s,%s,%s,%s,%s\n" % (Programa.Observacion,self.NroPromedioClientesEnCola,self.UtilizacionPromedioServidores,self.DemoraPromedioPorCliente,self.NroMaximoDeClientesEnCola)
-            if Programa.Observacion <=1:
+            if Programa.Observacion <= 1:
                 # Escribo la cabecera
                 with open(Reporte.outputfile+'.csv', 'wb') as csvfile:
                     spamwriter = csv.writer(csvfile, delimiter=';', quotechar=';', quoting=csv.QUOTE_MINIMAL)
-                    spamwriter.writerow(['Observaciones','Nro Promedio Clientes En Cola', 'Utilizacion Promedio Servidores', 'Demora Promedio Por Cliente','Cantidad Maxima de Clientes en Cola'])
+                    spamwriter.writerow(['Observaciones', 'Nro Promedio Clientes En Cola', 'Utilizacion Promedio Servidores', 'Demora Promedio Por Cliente', 'Cantidad Maxima de Clientes en Cola'])
             # agrego una linea
             with open(Reporte.outputfile+'.csv', 'a') as csvfile:
                 csvfile.write(newRow.encode('utf8'))

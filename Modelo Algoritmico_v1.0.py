@@ -1,19 +1,23 @@
+import sys
+import getopt
+import time
+import io
+import csv
+import math
 import numpy as np
 import time
 from collections import deque
 import random
 from array import *
-import pandas as pd
-import sys
 
 class Simulator(object):
     def __init__(self):
-        self.Reloj = 0.0
-        self.EstadoAplastador = ""
-        self.EstadoPala1 = ""
-        self.EstadoPala2 = ""
-        self.EstadoPala3 = ""
-        self.tm20Carga = 5
+        self.reloj = 0.0
+        self.estado_aplastador = ""
+        self.estado_pala1 = ""
+        self.estado_pala2 = ""
+        self.estado_pala3 = ""
+        self.tc20Carga = 5
         self.tm50Carga = 10
         self.tm20Descarga = 2
         self.tm50Descarga = 5
@@ -26,8 +30,6 @@ class Simulator(object):
         self.ListaDeEventos = array('f')
         self.Cola = array('f')
 
-
-
     def inicializar(self):
         self.Reloj = 0
         self.EstadoAplastador = 'D'
@@ -37,7 +39,6 @@ class Simulator(object):
         self.ListaDeEventos = array('f')
         self.Cola = array('f')
         self.matProcesadoDiario = 0
-
 
         # 'Calculo el tiempo de primer arribo
         #TODO segun el enunciado ver como lo ponemos
@@ -129,19 +130,36 @@ class Simulator(object):
             self.ListaDeEventos[1] = 99999.0
 
     def tiempos(self):
-        #Todo buscar el algoritmo que nos dio el profe y plasmarlo aca
-        self.TiempoUltimoEvento = self.Reloj
-        if self.ListaDeEventos[0] <= self.ListaDeEventos[1]:
+        #TODO buscar el algoritmo que nos dio el profe y plasmarlo aca
+        self.tiempoUltimoEvento = self.Reloj
+        if self.ListaDeEventos.index(min(self.ListaDeEventos)) == 0:
             self.Reloj = self.ListaDeEventos[0]
-            self.ProximoEvento = "ARRIBOS"
-
-        else:
+            self.ProximoEvento = "Arribo a la pala 1"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 1:
             self.Reloj = self.ListaDeEventos[1]
-            self.ProximoEvento = "PARTIDAS"
+            self.ProximoEvento = "Arribo a la pala 2"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 2:
+            self.Reloj = self.ListaDeEventos[2]
+            self.ProximoEvento = "Arribo a la pala 3"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 3:
+            self.Reloj = self.ListaDeEventos[3]
+            self.ProximoEvento = "Partida desde la pala 1"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 4:
+            self.Reloj = self.ListaDeEventos[4]
+            self.ProximoEvento = "Partida desde la pala 2"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 5:
+            self.Reloj = self.ListaDeEventos[5]
+            self.ProximoEvento = "Partida desde la pala 3"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 6:
+            self.Reloj = self.ListaDeEventos[6]
+            self.ProximoEvento = "Arribo al aplastador"
+        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 7:
+            self.Reloj = self.ListaDeEventos[7]
+            self.ProximoEvento = "Partida desde el aplastador"
 
 
     def reportes(self, x):
-        #Todo solo agregar la de material procesado en el mes
+        #TODO solo agregar la de material procesado en el mes
         print("El material procesado en el mes es de", self.materialProcesado, ' toneladas')
 
 
@@ -162,7 +180,7 @@ def is_number(s):
 def generarDataFrame():
     index = list(range(0 , 101))
     columns = ['Nro Promedio Clientes En Cola', 'Utilizacion Promedio Servidores',
-               'Demora Promedio Por Cliente', 'Cantidad Maxima de Clientes en Cola']
+            'Demora Promedio Por Cliente', 'Cantidad Maxima de Clientes en Cola']
     df = pd.DataFrame(index=index, columns=columns)
     df.index.name = 'Observaciones'
     df = df.fillna(0)
