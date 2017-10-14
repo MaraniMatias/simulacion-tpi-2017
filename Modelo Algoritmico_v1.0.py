@@ -1,23 +1,19 @@
-import sys
-import getopt
-import time
-import io
-import csv
-import math
 import numpy as np
 import time
 from collections import deque
 import random
 from array import *
+import pandas as pd
+import sys
 
 class Simulator(object):
     def __init__(self):
-        self.reloj = 0.0
-        self.estado_aplastador = ""
-        self.estado_pala1 = ""
-        self.estado_pala2 = ""
-        self.estado_pala3 = ""
-        self.tc20Carga = 5
+        self.Reloj = 0.0
+        self.EstadoAplastador = ""
+        self.EstadoPala1 = ""
+        self.EstadoPala2 = ""
+        self.EstadoPala3 = ""
+        self.tm20Carga = 5
         self.tm50Carga = 10
         self.tm20Descarga = 2
         self.tm50Descarga = 5
@@ -29,6 +25,14 @@ class Simulator(object):
         self.ProximoEvento = ""
         self.ListaDeEventos = array('f')
         self.Cola = array('f')
+        self.EstadoCamionA1 = ''
+        self.EstadoCamionB1 = ''
+        self.EstadoCamionA2 = ''
+        self.EstadoCamionB2 = ''
+        self.EstadoCamionA3 = ''
+        self.EstadoCamionB3 = ''
+
+
 
     def inicializar(self):
         self.Reloj = 0
@@ -39,6 +43,19 @@ class Simulator(object):
         self.ListaDeEventos = array('f')
         self.Cola = array('f')
         self.matProcesadoDiario = 0
+        self.EstadoCamionA1 = 'En pala'
+        self.EstadoCamionB1 = 'En pala'
+        self.EstadoCamionA2 = 'En pala'
+        self.EstadoCamionB2 = 'En pala'
+        self.EstadoCamionA3 = 'En pala'
+        self.EstadoCamionB3 = 'En pala'
+        #Incluyo estado camion porque no se me ocurre otra forma para discernir entre los tiempos de cada camion
+        #Mi propuesta son  estados: "En pala" (aca podria ser tanto para que recien llega desde el aplastador y tambien por si tiene que estar esperando su turno)
+        #                           "Cargando"
+        #                           "En viaje ida"
+        #                           "En aplastador" (aca podria ser tanto para que recien llega desde la pala y tambien por si tiene que estar esperando su turno)
+        #                           "Descargando"
+        #                           "En viaje vuelta"
 
         # 'Calculo el tiempo de primer arribo
         #TODO segun el enunciado ver como lo ponemos
@@ -87,27 +104,73 @@ class Simulator(object):
        # self.df.index.name = 'Observaciones'
        # self.df.to_csv(path + "Salida Punto 7.csv", index=True, encoding='Latin-1')
 
-    def arribos(self):
-        # Todo arribo desencadena un nuevo arribo
-        tEntreArribos, self.Zo = generarTiempoEntreArribos(self.TMEntreArribos, self.DesvioTEntreArribos, self.K, self.Zo)
-        self.ListaDeEventos[0] = self.Reloj + tEntreArribos
+    def arriboPala1(self):
+        # Rutina de arribo a la pala j
 
-        if self.EstadoServidor == "D":
-            self.EstadoServidor = "O"
-            tServicio, self.Zo = generarTiempoDeServicio(self.TMDeServicio, self.a, self.b, self.Zo)
-            self.ListaDeEventos[1] = self.Reloj + tServicio
-            self.TSAcumulado += (self.ListaDeEventos[1] - self.Reloj)
-            self.CompletaronDemora += 1
+        # Usamos estadoPala j, generamos el tiempo de carga sabiendo el valor de la media y generamos el evento partida camion (ListaEventos[x]= reloj + tCarga)
+        # Al haber 2 camiones no creo q sea necesario comparar sus tiempos de llegada. Pues cuando uno llega puede pasar que este ocupada la pala y entra a la cola, pero como
+        # solamente hay 2 camiones es al pedo, no se que opinan
+        if self.EstadoPala1 == 'D':
+            if self.EstadoCamionA1 == 'En pala':
+                tmCarga = self.tm20Carga
+                self.EstadoCamionA1 = 'En viajeIda'
 
-        else:
-            self.AreaQDeT += (self.NroDeClientesEnCola * (self.Reloj - self.TiempoUltimoEvento))
-            self.NroDeClientesEnCola += 1
-            #--------Punto 2----------
-            if(self.NroDeClientesEnCola > self.maxCliEnCola):
-                self.maxCliEnCola=self.NroDeClientesEnCola
-            #**************************
+            else:
+                tmCarga = self.tm50Carga
+                self.EstadoCamionB1 = 'En viajeIda'
+
+            tCarga = genTiempoCarga(tmCarga)
+            ListaEventos = self.Reloj + tCarga
+            # ListaEventos[x] = Reloj + tCarga
+            self.EstadoPala1 = 'O'
+
+
+        else:  # Pala Ocupada
+            # Creo que almacenar el tiempo de llegada en este caso es al pedo, si nos serviria con la cola del aplastador
+            # tLLegada = Reloj
             self.Cola.append(self.Reloj)
 
+    def arriboPala2(self):
+        if self.EstadoPala2 == 'D':
+            if self.EstadoCamionA2 == 'En pala':
+                tmCarga = self.tm20Carga
+                self.EstadoCamionA2 = 'En viajeIda'
+
+            else:
+                tmCarga = self.tm50Carga
+                self.EstadoCamionB2 = 'En viajeIda'
+
+            tCarga = genTiempoCarga(tmCarga)
+            ListaEventos = self.Reloj + tCarga
+            # ListaEventos[x] = Reloj + tCarga
+            self.EstadoPala2 = 'O'
+
+
+        else:  # Pala Ocupada
+            # Creo que almacenar el tiempo de llegada en este caso es al pedo, si nos serviria con la cola del aplastador
+            # tLLegada = Reloj
+            self.Cola.append(self.Reloj)
+
+    def arriboPala3(self):
+        if self.EstadoPala3 == 'D':
+            if self.EstadoCamionA3 == 'En pala':
+                tmCarga = self.tm20Carga
+                self.EstadoCamionA3 = 'En viajeIda'
+
+            else:
+                tmCarga = self.tm50Carga
+                self.EstadoCamionB3 = 'En viajeIda'
+
+            tCarga = genTiempoCarga(tmCarga)
+            ListaEventos = self.Reloj + tCarga
+            # ListaEventos[x] = Reloj + tCarga
+            self.EstadoPala3 = 'O'
+
+
+        else:  # Pala Ocupada
+            # Creo que almacenar el tiempo de llegada en este caso es al pedo, si nos serviria con la cola del aplastador
+            # tLLegada = Reloj
+            self.Cola.append(self.Reloj)
 
     def partidas(self):
         # ' Pregunto si hay clientes en cola
@@ -130,36 +193,19 @@ class Simulator(object):
             self.ListaDeEventos[1] = 99999.0
 
     def tiempos(self):
-        #TODO buscar el algoritmo que nos dio el profe y plasmarlo aca
-        self.tiempoUltimoEvento = self.Reloj
-        if self.ListaDeEventos.index(min(self.ListaDeEventos)) == 0:
+        #Todo buscar el algoritmo que nos dio el profe y plasmarlo aca
+        self.TiempoUltimoEvento = self.Reloj
+        if self.ListaDeEventos[0] <= self.ListaDeEventos[1]:
             self.Reloj = self.ListaDeEventos[0]
-            self.ProximoEvento = "Arribo a la pala 1"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 1:
+            self.ProximoEvento = "ARRIBOS"
+
+        else:
             self.Reloj = self.ListaDeEventos[1]
-            self.ProximoEvento = "Arribo a la pala 2"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 2:
-            self.Reloj = self.ListaDeEventos[2]
-            self.ProximoEvento = "Arribo a la pala 3"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 3:
-            self.Reloj = self.ListaDeEventos[3]
-            self.ProximoEvento = "Partida desde la pala 1"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 4:
-            self.Reloj = self.ListaDeEventos[4]
-            self.ProximoEvento = "Partida desde la pala 2"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 5:
-            self.Reloj = self.ListaDeEventos[5]
-            self.ProximoEvento = "Partida desde la pala 3"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 6:
-            self.Reloj = self.ListaDeEventos[6]
-            self.ProximoEvento = "Arribo al aplastador"
-        elif self.ListaDeEventos.index(min(self.ListaDeEventos)) == 7:
-            self.Reloj = self.ListaDeEventos[7]
-            self.ProximoEvento = "Partida desde el aplastador"
+            self.ProximoEvento = "PARTIDAS"
 
 
     def reportes(self, x):
-        #TODO solo agregar la de material procesado en el mes
+        #Todo solo agregar la de material procesado en el mes
         print("El material procesado en el mes es de", self.materialProcesado, ' toneladas')
 
 
@@ -186,15 +232,8 @@ def generarDataFrame():
     df = df.fillna(0)
     return df
 
-#Punto 1
-def ingresarVariablesDeEntrada():
-    cond = False
-    while (cond == False):
-        K = input("Ingrese el valor de K: ")
-        if is_number(K) == True:
-            K = int(K)
-            cond = True
-    return K
+def genTiempoCarga(media):
+    return np.random.exponential(media)
 
 #Punto 4
 def menorTiempoEstimado(cola, TMDeServicio, a, b, Zo):
@@ -242,5 +281,7 @@ def generarTiempoDeServicio(mediaTServ, a, b, Zo):
 sys.stdout.flush()
 sim1 = Simulator()
 sim1.run()
+
+
 
 

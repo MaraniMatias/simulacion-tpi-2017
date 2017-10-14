@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
-import sys, getopt, time, io, csv, math
+import sys
+import getopt
+import time
+import csv
+import math
 import numpy as np
 from array import *
 
@@ -21,8 +25,8 @@ from array import *
 
 class Simulator(object):
 
-    DistribucionVariableTiempoEntreArribos = "exponential"
-    DistribucionVariableTiempoServicio = "exponential"
+    DistribucionTiempoEntreArribos = "exponential"
+    DistribucionTiempoServicio = "exponential"
     TipoDeDistribucionDeCola = "FIFO"
 
     def __init__(self):
@@ -101,8 +105,8 @@ class Simulator(object):
             print colors.LightCyan+"TMDeServicio\t"+colors.NC+str(self.TMDeServicio)+colors.NC
             print colors.LightCyan+"Iniciado\t"+colors.BrownOrange+str(self.Iniciado)+colors.NC
 
-            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionVariableTiempoEntreArribos
-            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionVariableTiempoServicio
+            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionTiempoEntreArribos
+            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionTiempoServicio
             print colors.NC+"\n"
 
     # Sub Principal()
@@ -236,8 +240,8 @@ class Reporte(object):
             print colors.Yellow+"Variables de entrada:"+colors.NC
             print colors.LightCyan+"Tiempo medio de servicio: "+colors.NC+str(self.TMDeServicio)
             print colors.LightCyan+"Tiempo medio entre arribos: "+colors.NC+str(self.TMEntreArribos)
-            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionVariableTiempoEntreArribos
-            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionVariableTiempoServicio
+            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionTiempoEntreArribos
+            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionTiempoServicio
 
             print colors.Yellow+"Variables de respuesta:"+colors.NC
             print colors.Green+'Nro Promedio Clientes En Cola: '+colors.NC+str(self.NroPromedioClientesEnCola)
@@ -330,18 +334,18 @@ class Generador(object):
 
     def valor(self,serviocioArribos,media=1):
         if serviocioArribos == "arribo":
-            if Simulator.DistribucionVariableTiempoEntreArribos == "exponential":
+            if Simulator.DistribucionTiempoEntreArribos == "exponential":
                 return self.valorExponencial(media)
-            if Simulator.DistribucionVariableTiempoEntreArribos == "normal":
+            if Simulator.DistribucionTiempoEntreArribos == "normal":
                 return self.valorNormal()
-            if Simulator.DistribucionVariableTiempoEntreArribos == "uniforme":
+            if Simulator.DistribucionTiempoEntreArribos == "uniforme":
                 return self.valorUniforme()
         if serviocioArribos == "servicio":
-            if Simulator.DistribucionVariableTiempoServicio == "exponential":
+            if Simulator.DistribucionTiempoServicio == "exponential":
                 return self.valorExponencial(media)
-            if Simulator.DistribucionVariableTiempoServicio == "normal":
+            if Simulator.DistribucionTiempoServicio == "normal":
                 return self.valorNormal()
-            if Simulator.DistribucionVariableTiempoServicio == "uniforme":
+            if Simulator.DistribucionTiempoServicio == "uniforme":
                 return self.valorUniforme()
 
 #---------------------------------------------
@@ -378,11 +382,11 @@ class Programa(object):
         try:
             Simulator.TipoDeDistribucionDeCola = 'FIFO' if int(input('-> Tipo de disiplina para la cola'+colors.Yellow+'\n\t 1 - FIFO\n\t 2 - PRIORIDAD\n'+colors.NC+'Eligi un numero: ')) == 1 else 'PRIORIDAD'
             self.distribucionType()
-            Simulator.DistribucionVariableTiempoEntreArribos = self.distribucionType(int(input('-> Distribucion para variable tiempo entre arribos: [1|2|3] ')))
-            if Simulator.DistribucionVariableTiempoEntreArribos == "exponential":
+            Simulator.DistribucionTiempoEntreArribos = self.distribucionType(int(input('-> Distribucion para variable tiempo entre arribos: [1|2|3] ')))
+            if Simulator.DistribucionTiempoEntreArribos == "exponential":
                 self.TMEntreArribos = float(input("\tIngrese el tiempo medio entre arribos: "))
-            Simulator.DistribucionVariableTiempoServicio = self.distribucionType(int(input('-> Distribucion variable tiempo de servicio: [1|2|3] ')))
-            if Simulator.DistribucionVariableTiempoServicio == "exponential":
+            Simulator.DistribucionTiempoServicio = self.distribucionType(int(input('-> Distribucion variable tiempo de servicio: [1|2|3] ')))
+            if Simulator.DistribucionTiempoServicio == "exponential":
                 self.TMDeServicio = float(input("\tIngrese el tiempo medio de servicio: "))
 
         except:
