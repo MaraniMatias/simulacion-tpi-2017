@@ -1,4 +1,4 @@
-import Camiones
+import Camion
 
 # La cola de cada pala es FIFO.
 class Pala(Object):
@@ -10,4 +10,5 @@ class Pala(Object):
         self.CompletaronDemora = 0
         self.DemoraAcumulada = 0.0
 
-        self.arryPalas = [Camion()]
+        # Para cada pala se asignan dos camiones de 20 tn y uno de 50 tn
+        self.arryCamiones = [Camion(20), Camion(20), Camion(50)]
