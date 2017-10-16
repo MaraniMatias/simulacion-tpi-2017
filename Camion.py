@@ -10,12 +10,19 @@ import numpy as np
 
 class Camion(Object):
 
-    def __init__(self, toneladas=20, lamdaDestribucionCarga=5,lamdaDestribucionDescarga=2,viaje=2.5,regreso=1.5):
-        self.toneladas = toneladas
-        self.lamdaDestribucionCarga = lamdaDestribucionCarga
-        self.lamdaDestribucionDescarga = lamdaDestribucionDescarga
-        self.viaje = viaje
-        self.regreso = regreso
+    def __init__(self, tipo=20):
+        if tipo == 20:
+            self.toneladas = 20
+            self.lamdaDestribucionCarga = 5
+            self.lamdaDestribucionDescarga = 2
+            self.viaje = 2.5
+            self.regreso = 1.5
+        else:
+            self.toneladas = 50
+            self.lamdaDestribucionCarga = 10
+            self.lamdaDestribucionDescarga = 5
+            self.viaje = 3.0
+            self.regreso = 2.0
 
     def getNewTiempoCarga(self):
         return np.random.exponential(self.lamdaDestribucionCarga)

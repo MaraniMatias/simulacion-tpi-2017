@@ -1,3 +1,4 @@
+import colors
 import Simulator
 
 #---------------------------------------------
@@ -16,6 +17,8 @@ class Programa(object):
 # Ejecucion del modelo
 #---------------------------------------------
 if __name__ == "__main__":
+    print colors.Cyan+'~~~~~~~~~~~~~~~~Simulacion Camiones y Aplastadora~~~~~~~~~~~~~~~~'+ colors.NC
+
     program = Programa()
     sim = Simulator()
 
