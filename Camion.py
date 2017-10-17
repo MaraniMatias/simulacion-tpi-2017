@@ -1,12 +1,6 @@
 import numpy as np
+from Reporte import colors
 
-"""#import datetime
-# Public toneladas 20|50
-# Public lamdaDestribucionCarga para la funcion exponential de carga 5|10
-# Public lamdaDestribucionDescarga para la funcion exponential de carga 2|5
-# Public tiempo de viaje en horas 2.5|3
-# Public tiempo de regreso en horas 1.5|2
-"""
 class Camion(object):
 
     def __init__(self, tipo, nroPala):
@@ -37,3 +31,15 @@ class Camion(object):
 
     def getArriboAPala(self):
         return self.regreso
+
+    """
+    def toString(self):
+        print "palaAsignada " + str(self.palaAsignada)
+        print "tiempoLlegadaAlAplastador " + str(self.tiempoLlegadaAlAplastador)
+        print "tiempoLlegadaAlaPala " + str(self.tiempoLlegadaAlaPala)
+        print "toneladas " + str(self.toneladas)
+        print "lamdaDestribucionCarga " + str(self.lamdaDestribucionCarga)
+        print "lamdaDestribucionDescarga " + str(self.lamdaDestribucionDescarga)
+        print "viaje " + str(self.viaje)
+        print "regreso " + str(self.regreso)
+    """
