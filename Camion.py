@@ -7,10 +7,10 @@ import numpy as np
 # Public tiempo de viaje en horas 2.5|3
 # Public tiempo de regreso en horas 1.5|2
 """
-
 class Camion(Object):
 
-    def __init__(self, tipo=20):
+    def __init__(self, tipo, nroPala):
+        self.palaAsignada = nroPala
         if tipo == 20:
             self.toneladas = 20
             self.lamdaDestribucionCarga = 5
@@ -29,3 +29,9 @@ class Camion(Object):
 
     def getNewTiempoDescarga(self):
         return np.random.exponential(self.lamdaDestribucionDescarga)
+
+    def getArriboAlAplastador(self):
+        return self.viaje
+
+    def getArriboAPala(self):
+        return self.regreso

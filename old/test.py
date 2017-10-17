@@ -1,1 +1,2 @@
-print ( 3 < ( 4 and 5))
+for i in range(5):
+    print "asd"

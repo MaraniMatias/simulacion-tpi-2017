@@ -1,9 +1,6 @@
-import colors
-import Simulator
+from colors import colors
+from Simulator import Simulator
 
-#---------------------------------------------
-# Progrma
-#---------------------------------------------
 class Programa(object):
 
     def __init__(self):
@@ -13,13 +10,10 @@ class Programa(object):
         self.progresbar = False
         self.buscarLote = False
 
-#---------------------------------------------
-# Ejecucion del modelo
-#---------------------------------------------
 if __name__ == "__main__":
     print colors.Cyan+'~~~~~~~~~~~~~~~~Simulacion Camiones y Aplastadora~~~~~~~~~~~~~~~~'+ colors.NC
 
-    program = Programa()
+    programa = Programa()
     sim = Simulator()
 
     if program.progresbar:
@@ -27,11 +21,10 @@ if __name__ == "__main__":
 
     for x in range(programa.corridas):
         programa.observacion += 1
-        sim.inicializar()
         sim.run()
 
-        if program.progresbar:
+        if programa.progresbar:
             #TODO progres bar
 
-    if program.progresbar:
+    if programa.progresbar:
         #TODO progres bar

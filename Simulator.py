@@ -1,116 +1,134 @@
 # Asuma que en tiempo cero todos los camiones están en sus respectivas palas con los camiones de 50 tn en primer lugar.
 from array import *
-import math
-import Pala
+from Pala import Pala
+from Aplastador import Aplastador
+from Reporte import Reporte
 
 class Simulator(Object):
 
     def __init__(self):
-        self.Reloj = 0.0
-        self.EstadoServidor = ""
-        self.ProximoEvento = ""
-        self.ListaDeEventos = array('f')
+        self.showReportesIntermedios = False
+        self.reloj = 0.0
+        #self.proximoEvento = ""
+        self.listaDeEventos = array('f')
         self.TSAcumulado = 0.0
-        self.TiempoUltimoEvento = 0.0
-        self.Paso = 0
+        self.tiempoUltimoEvento = 0
         self.TMEntreArribos = 7.0
         self.TMDeServicio = 9.0
-        self.Iniciado = False
+        self.iniciado = False
 
-        self.arryPalas = [Pala() for i in range(3)]
-
-    def inicializar(self):
-        self.Reloj = 0
-        self.EstadoServidor = "D"
-        self.ProximoEvento = ""
-        self.TSAcumulado = 0
-        self.DemoraAcumulada = 0
-        self.NroDeClientesEnCola = 0
-        self.AreaQDeT = 0
-        self.TiempoUltimoEvento = 0
-        self.CompletaronDemora = 0
-
-        # Calculo el tiempo de primer arribo
-        self.ListaDeEventos.append(self.gen.valor("arribo",self.TMEntreArribos))
-
-        # Fuerza a que el primer evento no sea una partida
-        self.ListaDeEventos.append(999999.0)
-        self.Paso = 0
-        self.Iniciado = False
-        #self.toString() # al solo efecto de ver como evolucionan los valores de las variables
+        self.reporte = Reporte()
+        self.arryPalas = [Pala(i) for i in range(3)]
+        self.arryAplastadores = [Aplastador()] # alternativa usa otro aplastador
 
     # Sub Principal()
     def run(self):
-        # Llamo a la rutina de inicializacion
         self.inicializar()
-        # Loop, la simulacion, reloj es el finde la simulacion, en este caso 8 tick
-        while not(self.Reloj >= 8 and self.NroDeClientesEnCola == 0 and self.EstadoServidor == "D"):
-            self.tiempos() # llamada a la rutina de tiempos
-            # llamada a la rutina correspondiente en funcion del tipo de evento, Select ProximoEvento
-            if self.ProximoEvento == "ARRIBOS":
-                self.arribos()
-            else:
-                self.partidas()
+        # Loop, la simulacion, reloj es el finde la simulacion
+        while (self.Reloj <= 8):
+            # la rutina tiempo llama directamente a los eventos
+            index = self.tiempos() # -> NO tiene sentido separar en dos, Pero el profesor lo pide asi :/, demas la separa y compara dos vesces lo mismo, string con estring una perdida de recursos
+            # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
+            if index == 0:
+                self.arribosPala(1) #self.proximoEvento = 'ARRIBOS_PALA_1'
+            elif index == 1:
+                self.arribosPala(2) #self.proximoEvento = 'ARRIBOS_PALA_2'
+            elif index == 2:
+                self.arribosPala(3) #self.proximoEvento = 'ARRIBOS_PALA_3'
+            elif index == 3:
+                self.partidasPala(1) #self.proximoEvento = 'PARTIDAS_PALA_1'
+            elif index == 4:
+                self.partidasPala(2) #self.proximoEvento = 'PARTIDAS_PALA_2'
+            elif index == 5:
+                self.partidasPala(3) #self.proximoEvento = 'PARTIDAS_PALA_3'
+            elif index == 6:
+                self.arribosAplastador(1) #self.proximoEvento = 'ARRIBOS_APLASTADOR'
+            elif index == 7:
+                self.partidasAplastador(1) #self.proximoEvento = 'PARTIDAS_APLASTADOR'
             # Para ver valores intermedios
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
-        self.reportes()
+        #self.reporte
 
-    def arribos(self):
-        # Todo arribo desencadena un nuevo arribo
-        self.ListaDeEventos[0] = self.Reloj + self.gen.valor("arribo",self.TMEntreArribos)
-        # Pregunto si el servidor esta desocupado
-        if self.EstadoServidor == "D":
-            # Cambio el estado del servidor a "Ocupado"
-            self.EstadoServidor = "O"
-            # Programo el proximo evento partida
-            self.ListaDeEventos[1] = self.Reloj + self.gen.valor("servicio",self.TMDeServicio)
-            # Acumulo el tiempo de servicio
-            self.TSAcumulado += (self.ListaDeEventos[1] - self.Reloj)
-            # Actualizo la cantidad de clientes que completaron la demora
-            self.CompletaronDemora += 1
-        else:
-            # Calculo el area bajo Q(t) desde el momento actual del reloj hacia atras (TiempoUltimoEvento)
-            self.AreaQDeT += (self.NroDeClientesEnCola * (self.Reloj - self.TiempoUltimoEvento))
-            # Incremento la cantidad de clientes en cola en uno (1)
-            self.NroDeClientesEnCola += 1
-            # Guardo el valor del reloj en la posicionn "NroDeClientesEnCola" para saber cuando llegar el cliente a la cola y mas adelante calcular la demora.
-            self.addClienteEnCola()
-
-    def partidas(self):
+    def inicializar(self):
+        # 0 - ARRIBOS_PALA_1
+        # 1 - ARRIBOS_PALA_2
+        # 2 - ARRIBOS_PALA_3
+        # 3 - PARTIDAS_PALA_1
+        # 4 - PARTIDAS_PALA_2
+        # 5 - PARTIDAS_PALA_3
+        # 6 - ARRIBOS_APLASTADOR
+        # 7 - PARTIDAS_APLASTADOR
+        # Tengo que generarlo con el primer camion de todas las palas
+        # Calculo el tiempo de primer arribo
+        for i in range(3):
+            # como se asume que en el tiempo cero todos los camiones están en su pala.
+            self.listaDeEventos.append( 0 )
+        for j in range(4,8):
+            self.listaDeEventos.append(9999999) #forzar que no ocurran otros eventos
+        #self.toString() # al solo efecto de ver como evolucionan los valores de las variables
 
     def tiempos(self):
+        self.tiempoUltimoEvento = self.reloj
+        # Para buscar el proximo evento,
+        self.reloj = min(self.listaDeEventos)
+        return self.listaDeEventos.index(self.reloj)
 
-    def addClienteEnCola(self):
+    def arribosPala(self, nroPala):
+        nroPala = nroPala - 1 # Para pasarlo a index
+        if self.arryPalas[nroPala].desocupado:
+            self.arryPalas[nroPala].desocupado = False
+            self.listaDeEventos[nroPala + 3] =  self.Reloj + self.arryPalas[nroPala].calcularTimpoCarga()
+        else:
+            #  Agregar camión i de la pala j en la cola j
+            #XXX Esta mal
+            self.arryPalas[nroPala].addCola(self.proximoCamion)
 
+    def partidasPala(self, nroPala):
+        nroPala = nroPala - 1 # Para pasarlo a index
+        if self.arryPalas[nroPala].hayCamionesEnCola():
+            # Como se genero una partida, parte el camion y  calculo tiempo de arribo al aplastador
+            camion = self.arryPalas[nroPala].partidaDeCamion()
+            self.listaDeEventos[6] = self.Reloj + camion.getArriboAlAplastador()
+            self.arryAplastadores[0].camionesLlegando.append(camion)
+            # Otro Camion empieza a llenarse
+            self.listaDeEventos[nroPala + 3] =  self.Reloj + self.arryPalas[nroPala].calcularTimpoCarga()
+        else:
+            self.arryPalas[nroPala].desocupado = True
+
+    def arribosAplastador(self,nroAplastador):
+        nroAplastador = nroAplastador - 1 #Para pasarlo a index
+        if self.arryAplastadores[nroAplastador].desocupado:
+            # Generar de partida del camion i del aplastador
+            # Tiempo de descarga de ese camion
+            self.listaDeEventos[7] =  self.Reloj + self.proximoCamion.getNewTiempoDescarga()
+            # Poner al aplastador en OCUPADO
+            self.arryAplastadores[nroAplastador].desocupado = False
+        else:
+            # Almacenar tiempo llegada del camión i de la pala j, lo tendo en el camion
+            # Poner camión i de la pala j en cola del aplastador
+            self.arryAplastadores[nroAplastador].addCola(self.proximoCamion)
+
+    def partidasAplastador(self, nroAplastador):
+        nroAplastador = nroAplastador - 1 #Para pasarlo a index
+        if self.arryAplastadores[nroAplastador].hayCamionesEnCola():
+            #Quitar camión de la cola
+            camion = self.arryAplastadores[nroAplastador].partidaDeCamion()
+            #Generar arribo a la pala j del camion que salio del aplastador
+            self.listaDeEventos[camion.palaAsignada] =  self.Reloj + camion.getArriboAPala()
+            #Generar nueva partida
+            self.listaDeEventos[7] =  self.Reloj + self.arryPalas[nroPala].calcularTimpoCarga()
+        else:
+            self.arryAplastadores[nroAplastador].desocupado = True
+            #Calcular y actualizar el material procesado
 
     # Para ver valores por consola, suele ser util
     def toString(self):
-        if not(Programa.Silencio):
+        if not(self.showReportesIntermedios):
             print "Valor de la simulacion: "
             print colors.LightCyan+"Relo\t"+colors.NC+str(self.Reloj)+colors.NC
-            print colors.LightCyan+"EstadoServidor\t"+colors.Yellow+str(self.EstadoServidor)+colors.NC
             print colors.LightCyan+"ProximoEvento\t"+colors.Yellow+str(self.ProximoEvento)+colors.NC
-            if len(self.ListaDeEventos) <= 15:
-                print colors.LightCyan+"ListaDeEventos\t"+colors.Purple+str(np.array(self.ListaDeEventos))+colors.NC
-            else:
-                print colors.LightCyan+"ListaDeEventos de logitud\t"+colors.Red+str(len(self.ListaDeEventos))+colors.NC
-            if len(self.Cola) <= 15:
-                print colors.LightCyan+"Cola\t"+colors.Purple+str(np.array(self.Cola))+colors.NC
-            else:
-                print colors.LightCyan+"Cola de longitud\t"+colors.Red+str(len(self.Cola))+colors.NC
-
             print colors.LightCyan+"TSAcumulado\t"+colors.NC+str(self.TSAcumulado)+colors.NC
-            print colors.LightCyan+"DemoraAcumulada\t"+colors.NC+str(self.DemoraAcumulada)+colors.NC
-            print colors.LightCyan+"NroDeClientesEnCola\t"+colors.NC+str(self.NroDeClientesEnCola)+colors.NC
-            print colors.LightCyan+"AreaQDeT\t"+colors.NC+str(self.AreaQDeT)+colors.NC
             print colors.LightCyan+"TiempoUltimoEvento\t"+colors.NC+str(self.TiempoUltimoEvento)+colors.NC
-            print colors.LightCyan+"CompletaronDemora\t"+colors.NC+str(self.CompletaronDemora)+colors.NC
             print colors.LightCyan+"Paso\t"+colors.NC+str(self.Paso)+colors.NC
-            print colors.LightCyan+"TMEntreArribos\t"+colors.NC+str(self.TMEntreArribos)+colors.NC
-            print colors.LightCyan+"TMDeServicio\t"+colors.NC+str(self.TMDeServicio)+colors.NC
-            print colors.LightCyan+"Iniciado\t"+colors.BrownOrange+str(self.Iniciado)+colors.NC
-
-            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionVariableTiempoEntreArribos
-            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionVariableTiempoServicio
             print colors.NC+"\n"
