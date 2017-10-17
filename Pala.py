@@ -15,9 +15,12 @@ class Pala(Object):
         # Para cada pala se asignan dos camiones de 20 tn y uno de 50 tn
         # En tiempo cero todos los camiones están en sus respectivas palas con los camiones de 50 tn en primer lugar.
         self.arryCamiones = [Camion(50, nroPala), Camion(20, nroPala), Camion(20, nroPala)] # Cola de camiones
+        self.camionesLlegando = []
+        self.camionCargando = None
 
     def calcularTimpoCarga(self):
         #Cola FIFO, calcular para el primer camion
+        self.camionCargan = self.arryCamiones[0]
         self.arryCamiones[0].getNewTiempoCarga()
 
     def hayCamionesEnCola(self):
@@ -27,6 +30,3 @@ class Pala(Object):
         # calculo tiempo de viaje del camion que se va
         return self.arryCamiones.pop(0)
 
-    def addCola(self, proximoCamion, reloj):
-        self.cola.append(reloj)
-        self.arryCamiones.append(proximoCamion)
