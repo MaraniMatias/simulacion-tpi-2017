@@ -1,7 +1,8 @@
+from array import *
 from Camion import Camion
 
 # La cola de cada pala es FIFO.
-class Pala(Object):
+class Pala(object):
 
     def __init__(self,nroPala):
         self.cola = array('f')
@@ -13,7 +14,7 @@ class Pala(Object):
         self.desocupado = True
 
         # Para cada pala se asignan dos camiones de 20 tn y uno de 50 tn
-        # En tiempo cero todos los camiones están en sus respectivas palas con los camiones de 50 tn en primer lugar.
+        # En tiempo cero todos los camiones estan en sus respectivas palas con los camiones de 50 tn en primer lugar.
         self.arryCamiones = [Camion(50, nroPala), Camion(20, nroPala), Camion(20, nroPala)] # Cola de camiones
         self.camionesLlegando = []
         self.camionCargando = None
@@ -21,7 +22,7 @@ class Pala(Object):
     def calcularTimpoCarga(self):
         #Cola FIFO, calcular para el primer camion
         self.camionCargan = self.arryCamiones[0]
-        self.arryCamiones[0].getNewTiempoCarga()
+        return self.arryCamiones[0].getNewTiempoCarga()
 
     def hayCamionesEnCola(self):
         return len(self.arryCamiones) > 0
@@ -38,6 +39,7 @@ class Pala(Object):
         return self.camionesLlegando[0].tiempoLlegadaAlAplastador
 
     def addCola(self):
-        camion = self.camionesLlegando.pop(0)
-        self.arryCamiones.append(camion)
+        if len(self.camionesLlegando) > 0:
+            camion = self.camionesLlegando.pop(0)
+            self.arryCamiones.append(camion)
 

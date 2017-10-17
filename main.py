@@ -1,4 +1,4 @@
-from colors import colors
+from Reporte import colors
 from Simulator import Simulator
 
 class Programa(object):
@@ -15,16 +15,6 @@ if __name__ == "__main__":
 
     programa = Programa()
     sim = Simulator()
-
-    if program.progresbar:
-    #TODO progres bar
-
-    for x in range(programa.corridas):
-        programa.observacion += 1
-        sim.run()
-
-        if programa.progresbar:
-            #TODO progres bar
-
-    if programa.progresbar:
-        #TODO progres bar
+    #for x in range(programa.corridas):
+    #    programa.observacion += 1
+    sim.run()

@@ -1,5 +1,7 @@
-#  La cola del aplastador está ordenada en forma decreciente por tamaño de camión. En caso de que existan varios camiones con iguales características, la cola es FIFO.
-class Aplastador(Object):
+#  La cola del aplastador esta ordenada en forma decreciente por tamanio de camion. En caso de que existan varios camiones con iguales caracteristicas, la cola es FIFO.
+from array import *
+
+class Aplastador(object):
 
     def __init__(self):
         self.cola = array('f')
@@ -36,10 +38,13 @@ class Aplastador(Object):
     def addCola(self):
         camion = self.camionesLlegando.pop(0)
         self.arryCamiones.append(camion)
-        # TODO ordenar por prioridad y fifo , la cola
+        ordenarColaPorPrioridadFIFO()
 
     def calcularTimpoDescarga(self):
         # la cola debe estar ordenada
         self.camionCargan = self.arryCamiones[0]
         self.arryCamiones[0].getNewTiempoDescarga()
 
+    def ordenarColaPorPrioridadFIFO(self):
+        # TODO pensar bien
+        self.arryCamiones = sorted(self.arryCamiones, key=lambda camion: camoin.toneladas)

@@ -7,7 +7,7 @@ import numpy as np
 # Public tiempo de viaje en horas 2.5|3
 # Public tiempo de regreso en horas 1.5|2
 """
-class Camion(Object):
+class Camion(object):
 
     def __init__(self, tipo, nroPala):
         self.palaAsignada = nroPala

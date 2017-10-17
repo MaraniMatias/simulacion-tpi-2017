@@ -1,7 +1,7 @@
 import csv
 
 # Utilidades para terminal
-class colors(Object):
+class colors(object):
     NC='\033[0m'
     Black='\033[0;30m'
     DarkGray='\033[1;30m'
@@ -19,7 +19,7 @@ class colors(Object):
     LightCyan='\033[1;36m'
     LightGray='\033[0;37m'
 
-class Reporte(Object):
+class Reporte(object):
 
     def __init__(self):
         self.outputfile ="./reportes/lote"
