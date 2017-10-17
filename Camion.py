@@ -12,6 +12,7 @@ class Camion(Object):
     def __init__(self, tipo, nroPala):
         self.palaAsignada = nroPala
         self.tiempoLlegadaAlAplastador = 99999999
+        self.tiempoLlegadaAlaPala = 99999999
         if tipo == 20:
             self.toneladas = 20
             self.lamdaDestribucionCarga = 5

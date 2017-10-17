@@ -38,3 +38,8 @@ class Aplastador(Object):
         self.arryCamiones.append(camion)
         # TODO ordenar por prioridad y fifo , la cola
 
+    def calcularTimpoDescarga(self):
+        # la cola debe estar ordenada
+        self.camionCargan = self.arryCamiones[0]
+        self.arryCamiones[0].getNewTiempoDescarga()
+

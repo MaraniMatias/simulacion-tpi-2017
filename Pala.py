@@ -30,3 +30,14 @@ class Pala(Object):
         # calculo tiempo de viaje del camion que se va
         return self.arryCamiones.pop(0)
 
+    def addCamionllegando(self,camion):
+        self.camionesLlegando.append(camion)
+        # Ordenar llegada
+        self.camionesLlegando = sorted(self.camionesLlegando, key=lambda camion: camoin.tiempoLlegadaAlAplastador)
+        # Para saver cuando ocurre el primer arribo al aplatador
+        return self.camionesLlegando[0].tiempoLlegadaAlAplastador
+
+    def addCola(self):
+        camion = self.camionesLlegando.pop(0)
+        self.arryCamiones.append(camion)
+
