@@ -4,12 +4,6 @@ from array import *
 class Aplastador(object):
 
     def __init__(self):
-        self.cola = array('f')
-        self.nroDeCamionesEnCola = 0
-        self.areaQDeT = 0.0
-        self.completaronDemora = 0
-        self.demoraAcumulada = 0.0
-        #self.estado = "D"
         self.desocupado = True
         self.arryCamiones = [] # cola de camiones
         self.camionesLlegando = []

@@ -11,12 +11,6 @@ class Simulator(object):
         self.reloj = 0.0
         self.proximoEvento = ""
         self.listaDeEventos = array('f')
-        self.TSAcumulado = 0.0
-        self.tiempoUltimoEvento = 0
-        self.TMEntreArribos = 7.0
-        self.TMDeServicio = 9.0
-        self.iniciado = False
-
         self.reporte = Reporte()
         self.arryPalas = [Pala(i) for i in range(3)]
         self.arryAplastadores = [Aplastador()] # alternativa usa otro aplastador

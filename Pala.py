@@ -5,19 +5,12 @@ from Camion import Camion
 class Pala(object):
 
     def __init__(self,nroPala):
-        self.cola = array('f')
-        self.nroDeCamionesEnCola = 0
-        self.areaQDeT = 0.0
-        self.completaronDemora = 0
-        self.demoraAcumulada = 0.0
-        #self.estado = "D"
         self.desocupado = True
-
+        self.camionesLlegando = []
+        self.camionCargando = None
         # Para cada pala se asignan dos camiones de 20 tn y uno de 50 tn
         # En tiempo cero todos los camiones estan en sus respectivas palas con los camiones de 50 tn en primer lugar.
         self.arryCamiones = [Camion(50, nroPala), Camion(20, nroPala), Camion(20, nroPala)] # Cola de camiones
-        self.camionesLlegando = []
-        self.camionCargando = None
 
     def calcularTimpoCarga(self):
         #Cola FIFO, calcular para el primer camion

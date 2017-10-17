@@ -20,33 +20,24 @@ class colors(object):
     LightGray='\033[0;37m'
 
 class Reporte(object):
+    #TODO Aca podemos hacer para mostrar las graficas
 
     def __init__(self):
         self.outputfile ="./reportes/lote"
 
-        self.NroPromedioClientesEnCola = 0.0
-        self.UtilizacionPromedioServidores = 0.0
-        self.DemoraPromedioPorCliente = 0.0
-        self.NroMaximoDeClientesEnCola = 0.0
-
-        # Valores de entrada:
-        self.TMDeServicio = 0.0
-        self.TMEntreArribos = 0.0
-
     def pathToSeva(self):
         print colors.LightBlue+"Guardado en: %s" % (self.outputfile)+colors.NC
 
-
     def toCsv(self, observacion):
-            newRow = "%s,%s,%s,%s,%s\n" % (Oubservacion,NroPromedioClientesEnCola,self.UtilizacionPromedioServidores,self.DemoraPromedioPorCliente,self.NroMaximoDeClientesEnCola)
-            if observacion <= 1:
-                # Escribo la cabecera
-                with open(Reporte.outputfile+'.csv', 'wb') as csvfile:
-                    spamwriter = csv.writer(csvfile, delimiter=';', quotechar=';', quoting=csv.QUOTE_MINIMAL)
-                    spamwriter.writerow(['Observaciones', 'Nro Promedio Clientes En Cola', 'Utilizacion Promedio Servidores', 'Demora Promedio Por Cliente', 'Cantidad Maxima de Clientes en Cola'])
-            # agrego una linea
-            with open(Reporte.outputfile+'.csv', 'a') as csvfile:
-                csvfile.write(newRow.encode('utf8'))
+        newRow = "%s,%s,%s,%s,%s\n" % (observacion)
+        if observacion <= 1:
+            # Escribo la cabecera
+            with open(Reporte.outputfile+'.csv', 'wb') as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter=';', quotechar=';', quoting=csv.QUOTE_MINIMAL)
+                spamwriter.writerow(['Observaciones'])
+        # agrego una linea
+        with open(Reporte.outputfile+'.csv', 'a') as csvfile:
+            csvfile.write(newRow.encode('utf8'))
 
     def show(self):
         if not program.progresbar:
@@ -61,5 +52,4 @@ class Reporte(object):
             print colors.Green+'Nro Promedio Clientes En Cola: '+colors.NC+str(self.NroPromedioClientesEnCola)
             print colors.Green+'Utilizacion Promedio Servidores: ' +colors.NC+ str(self.UtilizacionPromedioServidores)
             print colors.Green+'Demora Promedio Por Cliente: '+colors.NC+ str(self.DemoraPromedioPorCliente)
-            print colors.Green+'Cantidad Maxima de Clientes en Cola: '+colors.NC+ str(self.NroMaximoDeClientesEnCola)
             print colors.LightGreen+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n'+colors.NC
