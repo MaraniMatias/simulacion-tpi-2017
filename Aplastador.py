@@ -32,5 +32,4 @@ class Aplastador(object):
         self.ordenarColaPorPrioridadFIFO()
 
     def ordenarColaPorPrioridadFIFO(self):
-        # TODO pensar bien, capas que asi quede bien, pero no lo se
-        self.colaDeCamiones = sorted(self.colaDeCamiones, key=lambda camion: camion.toneladas)
+        self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas, reverse = True)
