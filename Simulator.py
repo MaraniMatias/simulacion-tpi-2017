@@ -98,6 +98,7 @@ class Simulator(object):
         nroPala = nroPala - 1  # Para pasarlo a index
         if self.arrayPalas[nroPala].desocupado:
             self.arrayPalas[nroPala].desocupado = False
+            self.listaDeEventos[nroPala] = 9999999
             self.arrayPalas[nroPala].addCola()  # Pasa el camion que llega, ala cola
             self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].pasarCamionACarga().getTiempoCarga()
         else:
