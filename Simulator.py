@@ -10,12 +10,13 @@ from Reporte import *
 
 class Simulator(object):
 
-    def __init__(self):
-        self.showReportesIntermedios = True
+    def __init__(self, limitReloj = 720):
+        self.showReportesIntermedios = not(True)
         self.reporte = Reporte()
         self.proximoEvento = ""  # No es necesaria para la simulacion, solo muestra
 
         self.reloj = 0.0
+        self.limitReloj = limitReloj
         self.materialProcesado = 0
         self.listaDeEventos = array('f')
         self.arrayPalas = [Pala(i) for i in range(3)]
@@ -23,9 +24,9 @@ class Simulator(object):
 
     # Sub Principal()
     def run(self):
-        self.inicializar()
+        self.limpiarVariablesDeSalida()
         # Loop, la simulacion, reloj es el finde la simulacion
-        while (self.reloj <= 2000):
+        while (self.reloj <= self.limitReloj):
             # la rutina tiempo llama directamente a los eventos
             index = self.tiempos()
             # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
@@ -56,7 +57,14 @@ class Simulator(object):
             # Para ver valores intermedios
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
-        self.reporte.toCsv(1, self.materialProcesado)
+        self.reporte.guardarObservacion(self.materialProcesado)
+        # Muestra el reporte por observacion
+        if not(self.showReportesIntermedios):
+            print colors.LightCyan + "Material procesado: " + colors.NC + str(self.materialProcesado)
+
+    def limpiarVariablesDeSalida(self):
+        self.reloj = 0.0
+        self.materialProcesado = 0
 
     def inicializar(self):
         # 0 - ARRIBOS_PALA_1

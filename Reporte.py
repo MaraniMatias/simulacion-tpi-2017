@@ -24,18 +24,32 @@ class Reporte(object):
 
     def __init__(self):
         self.outputfile = "./lote"
+        self.dataSet = [] # muestras por mes
+
+    def guardarObservacion(self, materialProcesado):
+        self.dataSet.append(materialProcesado)
 
     def pathToSeva(self):
         print colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC
 
-    def toCsv(self, observacion, materialProcesado):
-        newRow = "%s,%s\n" % (observacion, materialProcesado)
-        if observacion <= 1:
+    def toCsv(self, corrida = 1):
+        # fila
+        newRow = str(corrida)
+        for obs in self.dataSet:
+            newRow += ',' + str(obs)
+        newRow += '\n'
+
+        if corrida <= 1:
             # Escribo la cabecera
+            heard = ['Corrida']
+            for mes in range(len(self.dataSet)):
+                heard.append('mes ' + str(mes))
             with open(self.outputfile + '.csv', 'wb') as csvfile:
                 spamwriter = csv.writer(csvfile, delimiter = ';', quotechar = ';', quoting = csv.QUOTE_MINIMAL)
-                spamwriter.writerow(['Observaciones', 'Material procesado'])
+                spamwriter.writerow(heard)
         # agrego una linea
         with open(self.outputfile + '.csv', 'a') as csvfile:
             csvfile.write(newRow.encode('utf8'))
 
+        # Limpiar
+        self.dataSet = [] # muestras por mes
