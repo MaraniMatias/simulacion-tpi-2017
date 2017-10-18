@@ -24,7 +24,7 @@ class Simulator(object):
     def run(self):
         self.inicializar()
         # Loop, la simulacion, reloj es el finde la simulacion
-        while (self.reloj <= 100):
+        while (self.reloj <= 1000):
             # la rutina tiempo llama directamente a los eventos
             index = self.tiempos()
             # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
