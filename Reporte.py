@@ -43,7 +43,7 @@ class Reporte(object):
             # Escribo la cabecera
             heard = ['Corrida']
             for mes in range(len(self.dataSet)):
-                heard.append('mes ' + str(mes))
+                heard.append('mes ' + str(mes + 1))
             with open(self.outputfile + '.csv', 'wb') as csvfile:
                 spamwriter = csv.writer(csvfile, delimiter = ';', quotechar = ';', quoting = csv.QUOTE_MINIMAL)
                 spamwriter.writerow(heard)
