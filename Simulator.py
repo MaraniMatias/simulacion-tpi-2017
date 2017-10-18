@@ -11,14 +11,15 @@ from Reporte import *
 class Simulator(object):
 
     def __init__(self):
-        self.showReportesIntermedios = False
-        self.reloj = 0.0
-        self.proximoEvento = ""
-        self.listaDeEventos = array('f')
+        self.showReportesIntermedios = True
         self.reporte = Reporte()
+        self.proximoEvento = ""  # No es necesaria para la simulacion, solo muestra
+
+        self.reloj = 0.0
+        self.materialProcesado = 0
+        self.listaDeEventos = array('f')
         self.arrayPalas = [Pala(i) for i in range(3)]
         self.arrayAplastadores = [Aplastador()]  # alternativa usa otro aplastador
-        self.materialProcesado = 0
 
     # Sub Principal()
     def run(self):
@@ -55,7 +56,7 @@ class Simulator(object):
             # Para ver valores intermedios
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
-        # self.reporte
+        self.reporte.toCsv(1, self.materialProcesado)
 
     def inicializar(self):
         # 0 - ARRIBOS_PALA_1
@@ -172,7 +173,7 @@ class Simulator(object):
 
     # Para ver valores por consola, suele ser util
     def toString(self):
-        if not(self.showReportesIntermedios):
+        if self.showReportesIntermedios:
             print "Valor de la simulacion: "
             print colors.LightCyan + "Relo\t" + colors.NC + str(self.reloj) + colors.NC
             print colors.LightCyan + "Evento\t" + colors.NC + str(self.proximoEvento) + colors.NC

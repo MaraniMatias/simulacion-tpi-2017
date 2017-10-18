@@ -23,33 +23,19 @@ class Reporte(object):
     #TODO Aca podemos hacer para mostrar las graficas
 
     def __init__(self):
-        self.outputfile ="./reportes/lote"
+        self.outputfile = "./lote"
 
     def pathToSeva(self):
-        print colors.LightBlue+"Guardado en: %s" % (self.outputfile)+colors.NC
+        print colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC
 
-    def toCsv(self, observacion):
-        newRow = "%s,%s,%s,%s,%s\n" % (observacion)
+    def toCsv(self, observacion, materialProcesado):
+        newRow = "%s,%s\n" % (observacion, materialProcesado)
         if observacion <= 1:
             # Escribo la cabecera
-            with open(Reporte.outputfile+'.csv', 'wb') as csvfile:
-                spamwriter = csv.writer(csvfile, delimiter=';', quotechar=';', quoting=csv.QUOTE_MINIMAL)
-                spamwriter.writerow(['Observaciones'])
+            with open(self.outputfile + '.csv', 'wb') as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter = ';', quotechar = ';', quoting = csv.QUOTE_MINIMAL)
+                spamwriter.writerow(['Observaciones', 'Material procesado'])
         # agrego una linea
-        with open(Reporte.outputfile+'.csv', 'a') as csvfile:
+        with open(self.outputfile + '.csv', 'a') as csvfile:
             csvfile.write(newRow.encode('utf8'))
 
-    def show(self):
-        if not program.progresbar:
-            print colors.LightGreen+'~~~~~~~~~~~~~~~~~~~~~~Reporte~~~~~~~~~~ '+colors.BrownOrange +"Corrida: "+str(Programa.Observacion) +'/'+str(Programa.Corridas)+ colors.NC
-            print colors.Yellow+"Variables de entrada:"+colors.NC
-            print colors.LightCyan+"Tiempo medio de servicio: "+colors.NC+str(self.TMDeServicio)
-            print colors.LightCyan+"Tiempo medio entre arribos: "+colors.NC+str(self.TMEntreArribos)
-            print colors.LightCyan+"Distribucion para la variable tiempo entre arribos: "+colors.NC+Simulator.DistribucionVariableTiempoEntreArribos
-            print colors.LightCyan+"Distribucion para la variable tiempo servicio: "+colors.NC+Simulator.DistribucionVariableTiempoServicio
-
-            print colors.Yellow+"Variables de respuesta:"+colors.NC
-            print colors.Green+'Nro Promedio Clientes En Cola: '+colors.NC+str(self.NroPromedioClientesEnCola)
-            print colors.Green+'Utilizacion Promedio Servidores: ' +colors.NC+ str(self.UtilizacionPromedioServidores)
-            print colors.Green+'Demora Promedio Por Cliente: '+colors.NC+ str(self.DemoraPromedioPorCliente)
-            print colors.LightGreen+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n'+colors.NC

@@ -26,6 +26,29 @@ class Camion(object):
         return self.regreso
 
     """
+    def getNumAleatorio(self):
+        try:
+            #a = math.pow(7,5)
+            #m = math.pow(2,31) - 1
+            a = math.pow(5,15)
+            m = math.pow(2,35)
+            c = 0
+            zi = int( a * self.z0 +c ) %  m
+            self.z0 = zi
+            r = zi/m
+            if r < 0 and 1 < r:
+                raise ValueError('Rando mal generado. => ' + str(r))
+            return r
+        except ValueError:
+            print colors.Red + str(ValueError) + colors.NC
+
+    def valorExponencial(self,media):
+        try:
+            return np.random.exponential(media)
+        except ValueError:
+            print colors.Red + str(ValueError) + colors.NC
+    """
+    """
     def toString(self):
         print "palaAsignada " + str(self.palaAsignada)
         print "tiempoLlegadaAlAplastador " + str(self.tiempoLlegadaAlAplastador)
