@@ -1,5 +1,4 @@
 import numpy as np
-from Reporte import colors
 
 class Camion(object):
 
@@ -7,23 +6,17 @@ class Camion(object):
         self.palaAsignada = nroPala
         self.tiempoLlegadaAlAplastador = 99999999
         self.tiempoLlegadaAlaPala = 99999999
-        if tipo == 20:
-            self.toneladas = 20
-            self.lamdaDestribucionCarga = 5
-            self.lamdaDestribucionDescarga = 2
-            self.viaje = 2.5
-            self.regreso = 1.5
-        else:
-            self.toneladas = 50
-            self.lamdaDestribucionCarga = 10
-            self.lamdaDestribucionDescarga = 5
-            self.viaje = 3.0
-            self.regreso = 2.0
 
-    def getNewTiempoCarga(self):
+        self.toneladas = 20 if tipo == 20 else 50
+        self.lamdaDestribucionCarga = 5 if tipo == 20 else 10
+        self.lamdaDestribucionDescarga = 2 if tipo == 20 else 5
+        self.viaje = 2.5 if tipo == 20 else 3.0
+        self.regreso = 1.5 if tipo == 20 else 2.0
+
+    def getTiempoCarga(self):
         return np.random.exponential(self.lamdaDestribucionCarga)
 
-    def getNewTiempoDescarga(self):
+    def getTiempoDescarga(self):
         return np.random.exponential(self.lamdaDestribucionDescarga)
 
     def getArriboAlAplastador(self):

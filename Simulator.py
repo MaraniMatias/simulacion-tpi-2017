@@ -1,3 +1,4 @@
+# Para Debug
 # import pdb
 # pdb.set_trace()
 
@@ -23,33 +24,41 @@ class Simulator(object):
     def run(self):
         self.inicializar()
         # Loop, la simulacion, reloj es el finde la simulacion
-        while (self.reloj <= 10):
+        while (self.reloj <= 100):
             # la rutina tiempo llama directamente a los eventos
             index = self.tiempos()
             # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
             if index == 0:
                 self.proximoEvento = 'ARRIBOS_PALA_1'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.arribosPala(1)
             elif index == 1:
                 self.proximoEvento = 'ARRIBOS_PALA_2'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.arribosPala(2)
             elif index == 2:
                 self.proximoEvento = 'ARRIBOS_PALA_3'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.arribosPala(3)
             elif index == 3:
                 self.proximoEvento = 'PARTIDAS_PALA_1'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.partidasPala(1)
             elif index == 4:
                 self.proximoEvento = 'PARTIDAS_PALA_2'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.partidasPala(2)
             elif index == 5:
                 self.proximoEvento = 'PARTIDAS_PALA_3'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.partidasPala(3)
             elif index == 6:
                 self.proximoEvento = 'ARRIBOS_APLASTADOR'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.arribosAplastador(1)
             elif index == 7:
                 self.proximoEvento = 'PARTIDAS_APLASTADOR'
+                print colors.LightRed + self.proximoEvento + colors.NC
                 self.partidasAplastador(1)
             # Para ver valores intermedios
             self.toString()
@@ -89,21 +98,29 @@ class Simulator(object):
         nroPala = nroPala - 1  # Para pasarlo a index
         if self.arrayPalas[nroPala].desocupado:
             self.arrayPalas[nroPala].desocupado = False
-            self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].calcularTimpoCarga()
+            self.arrayPalas[nroPala].addCola()  # Pasa el camion que llega, ala cola
+            self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].pasarCamionACarga().getTiempoCarga()
         else:
             #  Agregar camion i de la pala j en la cola j
             self.arrayPalas[nroPala].addCola()  # Pasa el camion que llega, ala cola
+            # Como llego un camion tengo que programar la proximo arribo
+            if  self.arrayPalas[nroPala].hayCamionesLlegando():
+                # acomodar arribos al pala j, al estar ordena es el primero
+                self.listaDeEventos[nroPala] = self.arrayPalas[nroPala].camionesLlegando[0].tiempoLlegadaAlaPala
+            else:
+                # al no llegar camiones fuerso a que este evento no suseda
+                self.listaDeEventos[nroPala] = 9999999
 
     def partidasPala(self, nroPala):
         nroPala = nroPala - 1  # Para pasarlo a index
         if self.arrayPalas[nroPala].hayCamionesEnCola():
             # Como se genero una partida, parte el camion y  calculo tiempo de arribo al aplastador
-            camion = self.arrayPalas[nroPala].partidaDeCamion()
+            camion = self.arrayPalas[nroPala].camionCargando
             camion.tiempoLlegadaAlAplastador = self.reloj + camion.getArriboAlAplastador()
             # Guardar una cola de camiones llegando y el primero en llegar seria el proximo evento
-            self.listaDeEventos[6] = self.reloj + self.arrayAplastadores[0].addCamionllegando(camion)
-            # Otro Camion empieza a llenarse
-            self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].calcularTimpoCarga()
+            self.listaDeEventos[6] = self.arrayAplastadores[0].addCamionllegando(camion)
+            # Otro Camion empieza a llenarse, Genera la proxima partida
+            self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].pasarCamionACarga().getTiempoCarga()
         else:
             self.arrayPalas[nroPala].desocupado = True
             # Calcular el arribo al aplastador
@@ -119,19 +136,20 @@ class Simulator(object):
         nroAplastador = nroAplastador - 1  # Para pasarlo a index
         if self.arrayAplastadores[nroAplastador].desocupado:
             # sacar el camion que llego de  camionesLlegando,
-            camion = self.arrayAplastadores[nroAplastador].sacarCamionesLlegando()
+            self.arrayAplastadores[nroAplastador].addCola() # Pasa el camion que llega, ala cola
+            camion = self.arrayAplastadores[nroAplastador].pasarCamionADescarga()
             # acomodar arribos al Aplastador, al estar ordena es el primero
             self.listaDeEventos[6] = self.arrayAplastadores[0].camionesLlegando[0].tiempoLlegadaAlAplastador
-            self.materialProcesado += camion.toneladas
             # Generar de partida del camion i del aplastador
             # Tiempo de descarga de ese camion
-            self.listaDeEventos[7] = self.reloj + camion.getNewTiempoDescarga()
+            self.listaDeEventos[7] = self.reloj + camion.getTiempoDescarga()
             # Poner al aplastador en OCUPADO
             self.arrayAplastadores[nroAplastador].desocupado = False
         else:
             # Almacenar tiempo llegada del camion i de la pala j, lo tendo en el camion
             # Poner camion i de la pala j en cola del aplastador
             self.arrayAplastadores[nroAplastador].addCola()  # El aplastador sabe que camion llego
+            # Como llego un camion tengo que programar la proximo arribo
             if  self.arrayAplastadores[0].hayCamionesLlegando():
                 # acomodar arribos al Aplastador, al estar ordena es el primero
                 self.listaDeEventos[6] = self.arrayAplastadores[0].camionesLlegando[0].tiempoLlegadaAlAplastador
@@ -143,15 +161,27 @@ class Simulator(object):
         nroAplastador = nroAplastador - 1  # Para pasarlo a index
         if self.arrayAplastadores[nroAplastador].hayCamionesEnCola():
             # Quitar camion de la cola y el que se esta descargando
-            camion = self.arrayAplastadores[nroAplastador].partidaDeCamion()
+            camion = self.arrayAplastadores[nroAplastador].camionDescargando
             camion.tiempoLlegadaAlaPala = self.reloj + camion.getArriboAPala()
+            # Calcular y actualizar el material procesado
+            self.materialProcesado += camion.toneladas
             # Generar arribo a la pala j del camion que salio del aplastador
             self.listaDeEventos[camion.palaAsignada] = self.arrayPalas[camion.palaAsignada].addCamionllegando(camion)
-            # Otro Camion empieza a Descargarse
-            self.listaDeEventos[7] = self.reloj + self.arrayAplastadores[nroAplastador].calcularTimpoDescarga()
+            # Otro Camion empieza a Descargarse, Genera la proxima partida
+            self.listaDeEventos[7] = self.reloj + self.arrayAplastadores[nroAplastador].pasarCamionADescarga().getTiempoDescarga()
         else:
-            self.arrayAplastadores[nroAplastador].desocupado = True
+            #TODO####TENGO QUE PENSARLO###########
+            camion = self.arrayAplastadores[nroAplastador].camionDescargando
+            camion.tiempoLlegadaAlaPala = self.reloj + camion.getArriboAPala()
             # Calcular y actualizar el material procesado
+            self.materialProcesado += camion.toneladas
+            # Generar arribo a la pala j del camion que salio del aplastador
+            self.listaDeEventos[camion.palaAsignada] = self.arrayPalas[camion.palaAsignada].addCamionllegando(camion)
+            ######################################
+
+            self.arrayAplastadores[nroAplastador].desocupado = True
+            self.listaDeEventos[7] = 9999999
+            self.arrayAplastadores[nroAplastador].camionDescargando = None
 
     # Para ver valores por consola, suele ser util
     def toString(self):
@@ -160,7 +190,5 @@ class Simulator(object):
             print colors.LightCyan + "Relo\t" + colors.NC + str(self.reloj) + colors.NC
             print colors.LightCyan + "Evento\t" + colors.NC + str(self.proximoEvento) + colors.NC
             print colors.LightCyan + "Material Procesado\t" + colors.NC + str(self.materialProcesado) + colors.NC
-            print colors.Green + "Lista de Eventos: " + colors.NC
-            print self.listaDeEventos
+            print colors.Green + "Lista de Eventos: " + colors.NC + str(self.listaDeEventos)
             print colors.NC + "\n"
-            print self.arrayAplastadores[0].camionesLlegando
