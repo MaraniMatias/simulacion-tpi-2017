@@ -24,7 +24,7 @@ class Simulator(object):
     def run(self):
         self.inicializar()
         # Loop, la simulacion, reloj es el finde la simulacion
-        while (self.reloj <= 1000):
+        while (self.reloj <= 2000):
             # la rutina tiempo llama directamente a los eventos
             index = self.tiempos()
             # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
@@ -106,21 +106,18 @@ class Simulator(object):
 
     def partidasPala(self, nroPala):
         nroPala = nroPala - 1  # Para pasarlo a index
+
+        # Parte el camion y  calculo tiempo de arribo al aplastador
+        camion = self.arrayPalas[nroPala].camionCargando
+        camion.tiempoLlegadaAlAplastador = self.reloj + camion.getArriboAlAplastador()
+        # Guardar una cola de camiones llegando y el primero en llegar seria el proximo evento
+        self.listaDeEventos[6] = self.arrayAplastadores[0].addCamionllegando(camion)
+
         if self.arrayPalas[nroPala].hayCamionesEnCola():
-            # Como se genero una partida, parte el camion y  calculo tiempo de arribo al aplastador
-            camion = self.arrayPalas[nroPala].camionCargando
-            camion.tiempoLlegadaAlAplastador = self.reloj + camion.getArriboAlAplastador()
-            # Guardar una cola de camiones llegando y el primero en llegar seria el proximo evento
-            self.listaDeEventos[6] = self.arrayAplastadores[0].addCamionllegando(camion)
             # Otro Camion empieza a llenarse, Genera la proxima partida
             self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].pasarCamionACarga().getTiempoCarga()
         else:
             self.arrayPalas[nroPala].desocupado = True
-            # Calcular el arribo al aplastador
-            camion = self.arrayPalas[nroPala].camionCargando
-            camion.tiempoLlegadaAlAplastador = self.reloj + camion.getArriboAlAplastador()
-            # Guardar una cola de camiones llegando y el primero en llegar seria el proximo evento
-            self.listaDeEventos[6] = self.arrayAplastadores[0].addCamionllegando(camion)
             self.arrayPalas[nroPala].camionCargando = None
             # Forzar, limpiar partias desde esta pala
             self.listaDeEventos[nroPala + 3] =  9999999
@@ -156,26 +153,19 @@ class Simulator(object):
 
     def partidasAplastador(self, nroAplastador):
         nroAplastador = nroAplastador - 1  # Para pasarlo a index
+
+        # Quitar camion de la cola y el que se esta descargando
+        camion = self.arrayAplastadores[nroAplastador].camionDescargando
+        camion.tiempoLlegadaAlaPala = self.reloj + camion.getArriboAPala()
+        # Calcular y actualizar el material procesado
+        self.materialProcesado += camion.toneladas
+        # Generar arribo a la pala j del camion que salio del aplastador
+        self.listaDeEventos[camion.palaAsignada] = self.arrayPalas[camion.palaAsignada].addCamionllegando(camion)
+
         if self.arrayAplastadores[nroAplastador].hayCamionesEnCola():
-            # Quitar camion de la cola y el que se esta descargando
-            camion = self.arrayAplastadores[nroAplastador].camionDescargando
-            camion.tiempoLlegadaAlaPala = self.reloj + camion.getArriboAPala()
-            # Calcular y actualizar el material procesado
-            self.materialProcesado += camion.toneladas
-            # Generar arribo a la pala j del camion que salio del aplastador
-            self.listaDeEventos[camion.palaAsignada] = self.arrayPalas[camion.palaAsignada].addCamionllegando(camion)
             # Otro Camion empieza a Descargarse, Genera la proxima partida
             self.listaDeEventos[7] = self.reloj + self.arrayAplastadores[nroAplastador].pasarCamionADescarga().getTiempoDescarga()
         else:
-            #TODO####TENGO QUE PENSARLO###########
-            camion = self.arrayAplastadores[nroAplastador].camionDescargando
-            camion.tiempoLlegadaAlaPala = self.reloj + camion.getArriboAPala()
-            # Calcular y actualizar el material procesado
-            self.materialProcesado += camion.toneladas
-            # Generar arribo a la pala j del camion que salio del aplastador
-            self.listaDeEventos[camion.palaAsignada] = self.arrayPalas[camion.palaAsignada].addCamionllegando(camion)
-            ######################################
-
             self.arrayAplastadores[nroAplastador].desocupado = True
             self.listaDeEventos[7] = 9999999
             self.arrayAplastadores[nroAplastador].camionDescargando = None
