@@ -34,3 +34,11 @@ class Pala(object):
         camion = self.camionesLlegando.pop(0)
         camion.tiempoLlegadaAlaPala = 99999999
         self.colaDeCamiones.append(camion)
+        #self.ordenarColaMayorMenor()
+        #self.ordenarColaMenorMayor()
+
+    def ordenarColaMayorMenor(self):
+        self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas, reverse = True)
+
+    def ordenarColaMenorMayor(self):
+        self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas)

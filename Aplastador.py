@@ -29,7 +29,11 @@ class Aplastador(object):
         camion = self.camionesLlegando.pop(0)
         camion.tiempoLlegadaAlAplastador = 99999999
         self.colaDeCamiones.append(camion)
+        #self.ordenarColaMenorMayor()
         self.ordenarColaPorPrioridadFIFO()
 
     def ordenarColaPorPrioridadFIFO(self):
         self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas, reverse = True)
+
+    def ordenarColaMenorMayor(self):
+        self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas)
