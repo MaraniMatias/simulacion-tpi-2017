@@ -23,7 +23,7 @@ class Reporte(object):
     #TODO Aca podemos hacer para mostrar las graficas
 
     def __init__(self):
-        self.outputfile = "./lote"
+        self.outputfile = "lote"
         self.dataSet = [] # muestras por mes
 
     def guardarObservacion(self, materialProcesado):

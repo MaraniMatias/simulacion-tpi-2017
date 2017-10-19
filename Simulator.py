@@ -23,10 +23,10 @@ class Simulator(object):
         self.arrayAplastadores = [Aplastador()]  # alternativa usa otro aplastador
 
     # Sub Principal()
-    def run(self):
-        self.limpiarVariablesDeSalida()
+    def run(self, observacion):
+        self.materialProcesado = 0
         # Loop, la simulacion, reloj es el finde la simulacion
-        while (self.reloj <= self.limitReloj):
+        while self.reloj <= (self.limitReloj * observacion):
             # la rutina tiempo llama directamente a los eventos
             index = self.tiempos()
             # encontre una forma de cumplir con lo del profesor y con mejor rendimiento
@@ -61,10 +61,6 @@ class Simulator(object):
         # Muestra el reporte por observacion
         if not(self.showReportesIntermedios):
             print colors.LightCyan + "Material procesado: " + colors.NC + str(self.materialProcesado)
-
-    def limpiarVariablesDeSalida(self):
-        self.reloj = 0.0
-        self.materialProcesado = 0
 
     def inicializar(self):
         # 0 - ARRIBOS_PALA_1
