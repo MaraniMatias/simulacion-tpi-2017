@@ -4,12 +4,12 @@ trabajo practico integrador
 ## Modelo algorítmico:
 
 ### Arribo a la pala j
-Si la pala j esta DESOCUPADA
-  Calcular tiempo de carga
-  Generar partida del camión i de la pala j
-  Poner la pala j em OCUPADO
-Si no
-  Agregar camión i de la pala j en la cola j
+- Si la pala j esta DESOCUPADA
+  - Calcular tiempo de carga
+  - Generar partida del camión i de la pala j
+  - Poner la pala j em OCUPADO
+- Si no
+  - Agregar camión i a la cola de la pala j
 
 ### Partida desde la pala j
 - Si hay camiones en cola
