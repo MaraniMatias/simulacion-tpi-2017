@@ -11,7 +11,7 @@ def update_progress(progress, status = '', corrida = ''):
         progress = 1
         status = "\n"
     block = int(round(barLength * progress))
-    text = str(colors.LightGreen + "\rCorridas: " + colors.NC + "{0} [{1}] {2}%" + colors.NC + " {3}").format(corrida, str(colors.LightGray + ("#" * block)) + str(colors.DarkGray + "." * (barLength - block) + colors.NC), progress * 100, status)
+    text = str(colors.LightGreen + "\rCorridas: " + colors.NC + "{0} [{1}] {2}%" + colors.NC + " {3}").format(corrida, str(colors.LightGray + ("#" * block)) + str(colors.DarkGray + "." * (barLength - block) + colors.NC), round(progress * 100, 1), status)
     sys.stdout.write(text)
     sys.stdout.flush()
 
@@ -21,8 +21,8 @@ from Simulator import Simulator
 class Programa(object):
 
     def __init__(self):
-        self.observacion = 40
-        self.corridas = 80
+        self.observacion = 100
+        self.corridas = 30
         self.silencio = False
         self.progresbar = True
         self.buscarLote = False
@@ -51,4 +51,4 @@ if __name__ == "__main__":
         sim.reporte.toCsv(corrida)
 
         ## tick toolbar
-        if programa.progresbar: update_progress(float(corrida) / programa.corridas,colors.LightCyan +  "Total de Material: " + colors.NC + str(materialProcesado), corrida)
+        if programa.progresbar: update_progress((float(corrida) / programa.corridas),colors.LightCyan +  "Total de Material: " + colors.NC + str(materialProcesado), corrida)
