@@ -58,9 +58,8 @@ class Simulator(object):
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
         self.reporte.guardarObservacion(self.materialProcesado)
-        # Muestra el reporte por observacion
-        if not(self.showReportesIntermedios):
-            print colors.LightCyan + "Material procesado: " + colors.NC + str(self.materialProcesado)
+        # Muestra la variable en la consola, solo me divierto
+        return self.materialProcesado
 
     def inicializar(self):
         # 0 - ARRIBOS_PALA_1
