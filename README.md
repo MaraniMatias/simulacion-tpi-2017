@@ -12,27 +12,27 @@ Si no
   Agregar camión i de la pala j en la cola j
 
 ### Partida desde la pala j
-Si hay camiones en cola
-  Generar partida desde la pala j __para el camion i+1__
-  Quitar camión i de la cola j
-  Generar Arribo al aplastador
-Si no
-  Poner la pala j em DESOCUPADA
+- Si hay camiones en cola
+  - Generar partida desde la pala j para el camion i
+  - Quitar camión i de la cola j
+  - Generar Arribo al aplastador
+- Si no
+  - Poner la pala j em DESOCUPADA
 
 ### Arribo al aplastador
-Si el aplastador esta DESOCUPADO
-  Generar de partida del camion i del aplastador
-  Poner al aplastador en OCUPADO
-Si no
-  Almacenar tiempo llegada del camión i de la pala j
-  Poner camión i de la pala j en cola del aplastador
+- Si el aplastador esta DESOCUPADO
+  - Poner al aplastador en OCUPADO
+  - Generar de partida del camion i del aplastador
+- Si no
+  - Poner camión i de la pala j en cola del aplastador
+  - Ordenar la cola por prioridades y FIFO en caso de igual tamaño
 
 ### Partida desde el aplastador
-Si hay camiones en cola
-  Generar nueva partida
-  Quitar camión de la cola
-  Generar arribo a la pala j
-Si no
-  Poner al aplastador en DESOCUPADO
-Calcular y actualizar el material procesado
+- Calcular y actualizar el material procesado
+- Si hay camiones en cola
+  - Quitar camión i de la cola
+  - Generar nueva partida, para el camion i + 1
+  - Generar arribo del camion i a la pala j
+- Si no
+  - Poner al aplastador en DESOCUPADO
 

@@ -12,7 +12,7 @@ class Simulator(object):
 
     def __init__(self, limitReloj = 720):
         self.showReportesIntermedios = not(True)
-        self.reporte = Reporte()
+        self.reporte = Reporte(limitReloj)
         self.proximoEvento = ""  # No es necesaria para la simulacion, solo muestra
 
         self.reloj = 0.0

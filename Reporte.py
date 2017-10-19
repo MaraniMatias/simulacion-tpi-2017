@@ -22,8 +22,8 @@ class colors(object):
 class Reporte(object):
     #TODO Aca podemos hacer para mostrar las graficas
 
-    def __init__(self):
-        self.outputfile = "lote"
+    def __init__(self, limitReloj):
+        self.outputfile = "reporte-cada-"+str(limitReloj)+"hs"
         self.dataSet = [] # muestras por mes
 
     def guardarObservacion(self, materialProcesado):
@@ -43,7 +43,7 @@ class Reporte(object):
             # Escribo la cabecera
             heard = ['Corrida']
             for mes in range(len(self.dataSet)):
-                heard.append('mes ' + str(mes + 1))
+                heard.append('obs ' + str(mes + 1))
             with open(self.outputfile + '.csv', 'wb') as csvfile:
                 spamwriter = csv.writer(csvfile, delimiter = ';', quotechar = ';', quoting = csv.QUOTE_MINIMAL)
                 spamwriter.writerow(heard)

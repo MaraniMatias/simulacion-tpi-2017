@@ -1,23 +1,35 @@
 import numpy as np
+# import time
+# import math
 
 class Camion(object):
+    # z0 = int(time.time())  # Solo para el numero ramdon
 
     def __init__(self, tipo, nroPala):
         self.palaAsignada = nroPala
         self.tiempoLlegadaAlAplastador = 99999999
         self.tiempoLlegadaAlaPala = 99999999
 
-        self.toneladas = 20 if tipo == 20 else 50
-        self.lamdaDestribucionCarga = 5 if tipo == 20 else 10
-        self.lamdaDestribucionDescarga = 2 if tipo == 20 else 5
-        self.viaje = 2.5 if tipo == 20 else 3.0
-        self.regreso = 1.5 if tipo == 20 else 2.0
+        if tipo != 70:
+            self.toneladas = 20 if tipo == 20 else 50
+            self.lamdaDestribucionCarga = 5 if tipo == 20 else 10
+            self.lamdaDestribucionDescarga = 2 if tipo == 20 else 5
+            self.viaje = 2.5 if tipo == 20 else 3.0
+            self.regreso = 1.5 if tipo == 20 else 2.0
+        else:
+            self.toneladas = 70
+            self.lamdaDestribucionCarga = 7
+            self.lamdaDestribucionDescarga = 3
+            self.viaje = 2.7
+            self.regreso = 1.7
 
     def getTiempoCarga(self):
         return np.random.exponential(self.lamdaDestribucionCarga)
+        # return self.valorExponencial(self.lamdaDestribucionCarga)
 
     def getTiempoDescarga(self):
         return np.random.exponential(self.lamdaDestribucionDescarga)
+        # return self.valorExponencial(self.lamdaDestribucionDescarga)
 
     def getArriboAlAplastador(self):
         return self.viaje
@@ -40,14 +52,15 @@ class Camion(object):
                 raise ValueError('Rando mal generado. => ' + str(r))
             return r
         except ValueError:
-            print colors.Red + str(ValueError) + colors.NC
+            print(colors.Red + str(ValueError) + colors.NC)
 
-    def valorExponencial(self,media):
+    def valorExponencial(self, media):
         try:
-            return np.random.exponential(media)
+            return -(1 / media) * np.log1p(self.getNumAleatorio())
         except ValueError:
-            print colors.Red + str(ValueError) + colors.NC
+            print(colors.Red + str(ValueError) + colors.NC)
     """
+
     """
     def toString(self):
         print "palaAsignada " + str(self.palaAsignada)
