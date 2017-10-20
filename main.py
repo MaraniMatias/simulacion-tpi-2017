@@ -20,11 +20,10 @@ from Simulator import Simulator
 class Programa(object):
 
     def __init__(self):
-        self.observacion = 100
-        self.corridas = 30
+        self.observacion = 1023 #  filas maximas 1023
+        self.corridas = 1
         self.progresbar = True
         self.buscarLote = False
-
 
 if __name__ == "__main__":
     print(colors.Yellow + 'Simulacion Camiones y Aplastadora' + colors.NC)
@@ -35,7 +34,7 @@ if __name__ == "__main__":
 
     materialProcesado = 0
     for corrida in range(1, programa.corridas + 1):
-        sim = Simulator(720*2)
+        sim = Simulator(720)
         sim.inicializar()
 
         for obs in range(1, programa.observacion + 1):
@@ -45,8 +44,8 @@ if __name__ == "__main__":
             materialProcesado += sim.run(obs)
 
             if not(programa.progresbar): print(colors.LightCyan + "Material procesado: " + colors.NC + str(materialProcesado))
+            ## tick toolbar
+            if programa.progresbar: update_progress((float(corrida+obs) / (programa.corridas+programa.observacion)), colors.LightCyan + " Media del Material: " + colors.NC + str(materialProcesado / ((programa.observacion + 1)*corrida)), corrida)
 
+        # Crea el reporte
         sim.reporte.toCsv(corrida)
-
-        ## tick toolbar
-        if programa.progresbar: update_progress((float(corrida) / programa.corridas), colors.LightCyan + " Media Mensual del Material: " + colors.NC + str(materialProcesado / ((programa.observacion + 1)*corrida)), corrida)
