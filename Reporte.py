@@ -24,15 +24,19 @@ class Reporte(object):
 
     def __init__(self, limitReloj):
         self.outputfile = "reporte-cada-"+str(limitReloj)+"hs"
-        self.dataSet = [] # muestras por mes
+        self.outputfileCola = "camiones-en-cola-aplastador-"+str(limitReloj)+"hs"
+        self.dataSetCola = list()
+        self.dataSet = list() # muestras por mes
 
-    def guardarObservacion(self, materialProcesado):
+    def guardarObservacion(self, materialProcesado, cola):
+        self.dataSetCola.append(cola)
         self.dataSet.append(materialProcesado)
 
     def pathToSeva(self):
         print(colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC)
 
     def toCsv(self, corrida = 1):
+        self.colaToCsv(corrida)
         # fila
         newRow = str(corrida)
         for obs in self.dataSet:
@@ -53,3 +57,25 @@ class Reporte(object):
 
         # Limpiar
         self.dataSet = [] # muestras por mes
+
+    def colaToCsv(self, corrida = 1):
+        # fila
+        newRow = str(corrida)
+        for obs in self.dataSetCola:
+            newRow += ',' + str(obs)
+        newRow += '\n'
+
+        if corrida <= 1:
+            # Escribo la cabecera
+            heard = ['Corrida']
+            for mes in range(len(self.dataSet)):
+                heard.append('obs ' + str(mes + 1))
+            with open(self.outputfileCola + '.csv', 'wb') as csvfile:
+                spamwriter = csv.writer(csvfile, delimiter = ';', quotechar = ';', quoting = csv.QUOTE_MINIMAL)
+                spamwriter.writerow(heard)
+        # agrego una linea
+        with open(self.outputfileCola + '.csv', 'a') as csvfile:
+            csvfile.write(newRow.encode('utf8'))
+
+        # limpiar
+        self.dataSetCola = [] # muestras por mes

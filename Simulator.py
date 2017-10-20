@@ -57,11 +57,13 @@ class Simulator(object):
             # Para ver valores intermedios
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
-        self.reporte.guardarObservacion(self.materialProcesado)
+        self.reporte.guardarObservacion(self.materialProcesado, len(self.arrayAplastadores[0].colaDeCamiones))
         # Muestra la variable en la consola, solo me divierto
         return self.materialProcesado
 
     def inicializar(self):
+        self.reloj = 0.0
+        self.materialProcesado = 0
         # 0 - ARRIBOS_PALA_1
         # 1 - ARRIBOS_PALA_2
         # 2 - ARRIBOS_PALA_3
@@ -178,20 +180,20 @@ class Simulator(object):
     def toString(self):
         if self.showReportesIntermedios:
             print("Valor de la simulacion: ")
-            print( colors.LightCyan + "Relo\t" + colors.NC + str(self.reloj) + colors.NC)
-            print( colors.LightCyan + "Evento\t" + colors.NC + str(self.proximoEvento) + colors.NC)
-            print( colors.LightCyan + "Material Procesado\t" + colors.NC + str(self.materialProcesado) + colors.NC)
-            print( colors.LightBlue + "Lista de Eventos:" + colors.NC)
+            print(colors.LightCyan + "Relo\t" + colors.NC + str(self.reloj) + colors.NC)
+            print(colors.LightCyan + "Evento\t" + colors.NC + str(self.proximoEvento) + colors.NC)
+            print(colors.LightCyan + "Material Procesado\t" + colors.NC + str(self.materialProcesado) + colors.NC)
+            print(colors.LightBlue + "Lista de Eventos:" + colors.NC)
             for i in range(len(self.listaDeEventos)):
-                print( colors.LightBlue + "Evento: " + colors.NC + str(i) + colors.Yellow + " Tiempo " + colors.NC + str(self.listaDeEventos[i]))
+                print(colors.LightBlue + "Evento: " + colors.NC + str(i) + colors.Yellow + " Tiempo " + colors.NC + str(self.listaDeEventos[i]))
             for i in range(len(self.arrayPalas)):
-                print( colors.LightPurple + "Pala: "+ str(i) + colors.NC)
-                print( colors.LightPurple + "\tCamion en carga: " + colors.NC + str(self.arrayPalas[i].camionCargando))
-                print( colors.LightPurple + "\tLong de cola: " + colors.NC + str(len(self.arrayPalas[i].colaDeCamiones)))
-                print( colors.LightPurple + "\tCamiones llegando: " + colors.NC + str(len(self.arrayPalas[i].camionesLlegando)))
+                print(colors.LightPurple + "Pala: " + str(i) + colors.NC)
+                print(colors.LightPurple + "\tCamion en carga: " + colors.NC + str(self.arrayPalas[i].camionCargando))
+                print(colors.LightPurple + "\tLong de cola: " + colors.NC + str(len(self.arrayPalas[i].colaDeCamiones)))
+                print(colors.LightPurple + "\tCamiones llegando: " + colors.NC + str(len(self.arrayPalas[i].camionesLlegando)))
             for i in range(len(self.arrayAplastadores)):
-                print( colors.LightGreen + "Aplastador: "+ str(i) + colors.NC)
-                print( colors.LightGreen + "\tCamion en descarga: " + colors.NC + str(self.arrayAplastadores[i].camionDescargando))
+                print(colors.LightGreen + "Aplastador: " + str(i) + colors.NC)
+                print(colors.LightGreen + "\tCamion en descarga: " + colors.NC + str(self.arrayAplastadores[i].camionDescargando))
                 print(colors.LightGreen + "\tLong de cola: " + colors.NC + str(len(self.arrayAplastadores[i].colaDeCamiones)))
-                print( colors.LightGreen + "\tCamiones llegando: " + colors.NC + str(len(self.arrayAplastadores[i].camionesLlegando)))
-            print( colors.NC + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+                print(colors.LightGreen + "\tCamiones llegando: " + colors.NC + str(len(self.arrayAplastadores[i].camionesLlegando)))
+                print(colors.NC + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
