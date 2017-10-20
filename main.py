@@ -27,7 +27,7 @@ class Programa(object):
 
 
 if __name__ == "__main__":
-    print colors.Yellow + 'Simulacion Camiones y Aplastadora' + colors.NC
+    print(colors.Yellow + 'Simulacion Camiones y Aplastadora' + colors.NC)
     programa = Programa()
 
     ## setup toolbar
@@ -35,16 +35,16 @@ if __name__ == "__main__":
 
     materialProcesado = 0
     for corrida in range(1, programa.corridas + 1):
-        sim = Simulator(720)
+        sim = Simulator(720*2)
         sim.inicializar()
 
         for obs in range(1, programa.observacion + 1):
-            if not(programa.progresbar): print colors.Yellow + 'Corrida: ' + str(corrida) + colors.LightGreen + ' Observacion: ' + colors.NC + str(obs)
+            if not(programa.progresbar): print(colors.Yellow + 'Corrida: ' + str(corrida) + colors.LightGreen + ' Observacion: ' + colors.NC + str(obs))
 
             # Corre simulacion
             materialProcesado += sim.run(obs)
 
-            if not(programa.progresbar): print colors.LightCyan + "Material procesado: " + colors.NC + str(materialProcesado)
+            if not(programa.progresbar): print(colors.LightCyan + "Material procesado: " + colors.NC + str(materialProcesado))
 
         sim.reporte.toCsv(corrida)
 

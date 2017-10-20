@@ -30,7 +30,7 @@ class Reporte(object):
         self.dataSet.append(materialProcesado)
 
     def pathToSeva(self):
-        print colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC
+        print(colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC)
 
     def toCsv(self, corrida = 1):
         # fila
