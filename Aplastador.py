@@ -1,3 +1,4 @@
+import sys
 #  La cola del aplastador esta ordenada en forma decreciente por tamanio de camion. En caso de que existan varios camiones con iguales caracteristicas, la cola es FIFO.
 class Aplastador(object):
 
@@ -15,7 +16,7 @@ class Aplastador(object):
 
     def pasarCamionADescarga(self):
         self.camionDescargando = self.colaDeCamiones.pop(0)
-        self.camionDescargando.tiempoLlegadaAlAplastador = 99999999
+        self.camionDescargando.tiempoLlegadaAlAplastador = sys.maxint
         return self.camionDescargando
 
     def addCamionllegando(self, camion):
@@ -27,7 +28,7 @@ class Aplastador(object):
 
     def addCola(self):
         camion = self.camionesLlegando.pop(0)
-        camion.tiempoLlegadaAlAplastador = 99999999
+        camion.tiempoLlegadaAlAplastador = sys.maxint
         self.colaDeCamiones.append(camion)
         #self.ordenarColaMenorMayor()
         self.ordenarColaPorPrioridadFIFO()

@@ -20,7 +20,7 @@ from Simulator import Simulator
 class Programa(object):
 
     def __init__(self):
-        self.observacion = 1023 #  filas maximas 1023
+        self.observacion = 1023 #  filas maximas en calc 1023
         self.corridas = 30
         self.progresbar = True
         self.buscarLote = False
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     materialProcesado = 0
     for corrida in range(1, programa.corridas + 1):
-        sim = Simulator(1)
+        sim = Simulator(720)
         sim.inicializar()
 
         for obs in range(1, programa.observacion + 1):

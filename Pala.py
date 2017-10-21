@@ -1,3 +1,4 @@
+import sys
 from Camion import Camion
 
 # La cola de cada pala es FIFO.
@@ -20,7 +21,7 @@ class Pala(object):
 
     def pasarCamionACarga(self):
         self.camionCargando = self.colaDeCamiones.pop(0)
-        self.camionCargando.tiempoLlegadaAlaPala = 99999999
+        self.camionCargando.tiempoLlegadaAlaPala = sys.maxint
         return self.camionCargando
 
     def addCamionllegando(self, camion):
@@ -32,10 +33,10 @@ class Pala(object):
 
     def addCola(self):
         camion = self.camionesLlegando.pop(0)
-        camion.tiempoLlegadaAlaPala = 99999999
+        camion.tiempoLlegadaAlaPala = sys.maxint
         self.colaDeCamiones.append(camion)
         #self.ordenarColaMayorMenor()
-        #self.ordenarColaMenorMayor()
+        self.ordenarColaMenorMayor()
 
     def ordenarColaMayorMenor(self):
         self.colaDeCamiones = sorted(self.colaDeCamiones, key = lambda camion: camion.toneladas, reverse = True)

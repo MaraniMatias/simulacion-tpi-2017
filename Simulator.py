@@ -75,7 +75,7 @@ class Simulator(object):
 
         # forzar que no ocurran eventos
         for x in range(8):
-            self.listaDeEventos.append(9999999)
+            self.listaDeEventos.append(sys.maxint)
 
         # como se asume que en el tiempo cero todos los camiones estan en su pala.
         # Por eso tenemos que calcular las partidas
@@ -96,7 +96,7 @@ class Simulator(object):
         nroPala = nroPala - 1  # Para pasarlo a index
         if self.arrayPalas[nroPala].desocupado:
             self.arrayPalas[nroPala].desocupado = False
-            self.listaDeEventos[nroPala] = 9999999
+            self.listaDeEventos[nroPala] = sys.maxint
             self.arrayPalas[nroPala].addCola()  # Pasa el camion que llega, ala cola
             self.listaDeEventos[nroPala + 3] = self.reloj + self.arrayPalas[nroPala].pasarCamionACarga().getTiempoCarga()
         else:
@@ -108,7 +108,7 @@ class Simulator(object):
                 self.listaDeEventos[nroPala] = self.arrayPalas[nroPala].camionesLlegando[0].tiempoLlegadaAlaPala
             else:
                 # al no llegar camiones fuerso a que este evento no suseda
-                self.listaDeEventos[nroPala] = 9999999
+                self.listaDeEventos[nroPala] = sys.maxint
 
     def partidasPala(self, nroPala):
         nroPala = nroPala - 1  # Para pasarlo a index
@@ -126,7 +126,7 @@ class Simulator(object):
             self.arrayPalas[nroPala].desocupado = True
             self.arrayPalas[nroPala].camionCargando = None
             # Forzar, limpiar partias desde esta pala
-            self.listaDeEventos[nroPala + 3] =  9999999
+            self.listaDeEventos[nroPala + 3] = sys.maxint
 
     def arribosAplastador(self, nroAplastador):
         nroAplastador = nroAplastador - 1  # Para pasarlo a index
@@ -144,7 +144,7 @@ class Simulator(object):
                 # acomodar arribos al Aplastador, al estar ordena es el primero
                 self.listaDeEventos[6] = self.arrayAplastadores[0].camionesLlegando[0].tiempoLlegadaAlAplastador
             else:
-                self.listaDeEventos[6] = 9999999
+                self.listaDeEventos[6] = sys.maxint
         else:
             # Almacenar tiempo llegada del camion i de la pala j, lo tendo en el camion
             # Poner camion i de la pala j en cola del aplastador
@@ -155,7 +155,7 @@ class Simulator(object):
                 self.listaDeEventos[6] = self.arrayAplastadores[0].camionesLlegando[0].tiempoLlegadaAlAplastador
             else:
                 # al no llegar camiones fuerso a que este evento no suseda
-                self.listaDeEventos[6] = 9999999
+                self.listaDeEventos[6] = sys.maxint
 
     def partidasAplastador(self, nroAplastador):
         nroAplastador = nroAplastador - 1  # Para pasarlo a index
@@ -173,7 +173,7 @@ class Simulator(object):
             self.listaDeEventos[7] = self.reloj + self.arrayAplastadores[nroAplastador].pasarCamionADescarga().getTiempoDescarga()
         else:
             self.arrayAplastadores[nroAplastador].desocupado = True
-            self.listaDeEventos[7] = 9999999
+            self.listaDeEventos[7] = sys.maxint
             self.arrayAplastadores[nroAplastador].camionDescargando = None
 
     # Para ver valores por consola, suele ser util
