@@ -11,18 +11,18 @@ class Camion(object):
         self.tiempoLlegadaAlAplastador = sys.maxint
         self.tiempoLlegadaAlaPala = sys.maxint
 
-        if tipo != 70:
+        if tipo != 100:
             self.toneladas = 20 if tipo == 20 else 50
             self.lamdaDestribucionCarga = 5 if tipo == 20 else 10
             self.lamdaDestribucionDescarga = 2 if tipo == 20 else 5
             self.viaje = 2.5 if tipo == 20 else 3.0
             self.regreso = 1.5 if tipo == 20 else 2.0
         else:
-            self.toneladas = 70
-            self.lamdaDestribucionCarga = 7
-            self.lamdaDestribucionDescarga = 3
-            self.viaje = 2.7
-            self.regreso = 1.7
+            self.toneladas = 100
+            self.lamdaDestribucionCarga = 10
+            self.lamdaDestribucionDescarga = 5
+            self.viaje = 2.5
+            self.regreso = 1.5
 
     def getTiempoCarga(self):
         return np.random.exponential(self.lamdaDestribucionCarga)

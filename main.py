@@ -11,7 +11,7 @@ def update_progress(progress, status = '', corrida = '', totalCorridas=''):
         progress = 1
         status = "\n"
     block = int(round(barLength * progress))
-    sys.stdout.write(str(colors.LightGreen + "\rCorridas: " + colors.NC + "{0}/{1} [{2}] {3}%" + colors.NC + " {4}").format(corrida, totalCorridas, str(colors.LightGray + ("#" * block)) + str(colors.DarkGray + "." * (barLength - block) + colors.NC), round(progress * 100, 1), status))
+    sys.stdout.write(str(colors.LightGreen + "\rCorridas: " + colors.NC + "{0}/{1} [{2}] {3}%" + colors.NC + " {4} ").format(corrida, totalCorridas, str(colors.LightGray + ("#" * block)) + str(colors.DarkGray + "." * (barLength - block) + colors.NC), round(progress * 100, 1), status))
     sys.stdout.flush()
 
 from Reporte import colors
