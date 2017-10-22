@@ -35,4 +35,4 @@ trabajo practico integrador
   - Generar arribo del camion i a la pala j
 - Si no
   - Poner al aplastador en DESOCUPADO
-
+- Generar el arribo del camion i ala pala j
