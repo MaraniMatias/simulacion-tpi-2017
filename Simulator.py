@@ -58,7 +58,8 @@ class Simulator(object):
             # Para ver valores intermedios
             self.toString()
         # Al salir del while es el fin de la simulacion, emitir reporte
-        self.reporte.guardarObservacion(self.materialProcesado, len(self.arrayAplastadores[0].colaDeCamiones))
+        #self.reporte.guardarObservacion(self.materialProcesado, len(self.arrayAplastadores[0].colaDeCamiones))
+        self.reporte.guardarObservacion(self.materialProcesado)
         # Muestra la variable en la consola, solo me divierto
         return self.materialProcesado
 

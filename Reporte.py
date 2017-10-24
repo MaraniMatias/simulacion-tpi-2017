@@ -20,7 +20,6 @@ class colors(object):
     LightGray='\033[0;37m'
 
 class Reporte(object):
-    #TODO Aca podemos hacer para mostrar las graficas
 
     def __init__(self, limitReloj):
         self.outputfile = "reporte-cada-"+str(limitReloj)+"hs"
@@ -28,15 +27,15 @@ class Reporte(object):
         self.dataSetCola = list()
         self.dataSet = list() # muestras por mes
 
-    def guardarObservacion(self, materialProcesado, cola):
-        self.dataSetCola.append(cola)
+    def guardarObservacion(self, materialProcesado, cola = None):
+        #self.dataSetCola.append(cola)
         self.dataSet.append(materialProcesado)
 
     def pathToSeva(self):
         print(colors.LightBlue + "Guardado en: %s" % (self.outputfile) + colors.NC)
 
     def toCsv(self, corrida = 1):
-        self.colaToCsv(corrida)
+        #self.colaToCsv(corrida)
         # fila
         newRow = str(corrida)
         for obs in self.dataSet:

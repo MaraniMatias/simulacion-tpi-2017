@@ -9,12 +9,11 @@ class Pala(object):
         self.camionesLlegando = []
         # Para cada pala se asignan dos camiones de 20 tn y uno de 50 tn
         # En tiempo cero todos los camiones estan en sus respectivas palas con los camiones de 50 tn en primer lugar.
-        if nroPala == 0:
-            self.colaDeCamiones = [Camion(50, nroPala), Camion(20, nroPala), Camion(20, nroPala)]# Cola de camiones
-        elif nroPala == 1:
-            self.colaDeCamiones = [Camion(50, nroPala), Camion(50, nroPala), Camion(20, nroPala)]# Cola de camiones
-        else:
-            self.colaDeCamiones = [Camion(20, nroPala), Camion(20, nroPala), Camion(20, nroPala)]# Cola de camiones
+        #if nroPala == 0:
+        self.colaDeCamiones = [Camion(50, nroPala), Camion(20, nroPala), Camion(20, nroPala)]# Cola de camiones
+        #elif nroPala == 1: self.colaDeCamiones = [Camion(50, nroPala), Camion(50, nroPala), Camion(20, nroPala)]# Cola de camiones
+        #else: self.colaDeCamiones = [Camion(20, nroPala), Camion(20, nroPala), Camion(20, nroPala)]# Cola de camiones
+
         # Como tiene que empezar con un camion en carga
         self.camionCargando = self.colaDeCamiones.pop(0)
 
